@@ -1,0 +1,779 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  english,
+  man,floatsintext]{apa6}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\ifLuaTeX
+  \usepackage[english]{selnolig} % disable illegal ligatures
+\fi
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\centering\begin{threeparttable}}
+%   {\end{threeparttable}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\centering\begin{ThreePartTable}}{\end{ThreePartTable}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% Overwrite redefinition of paragraph and subparagraph by the default LaTeX template
+% See https://github.com/crsh/papaja/issues/292
+\makeatletter
+\renewcommand{\paragraph}{\@startsection{paragraph}{4}{\parindent}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\bfseries\itshape\typesectitle}}
+
+\renewcommand{\subparagraph}[1]{\@startsection{subparagraph}{5}{1em}%
+  {0\baselineskip \@plus 0.2ex \@minus 0.2ex}%
+  {-\z@\relax}%
+  {\normalfont\normalsize\itshape\hspace{\parindent}{#1}\textit{\addperi}}{\relax}}
+\makeatother
+
+\makeatletter
+\usepackage{etoolbox}
+\patchcmd{\maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\patchcmd{\maketitle}
+  {\section{\protect\normalfont{\@title}}}
+  {\section*{\protect\normalfont{\@title}}}
+  {}{\typeout{Failed to patch title.}}
+\makeatother
+
+\usepackage{xpatch}
+\makeatletter
+\xapptocmd\appendix
+  {\xapptocmd\section
+    {\addcontentsline{toc}{section}{\appendixname\ifoneappendix\else~\theappendix\fi: #1}}
+    {}{\InnerPatchFailed}%
+  }
+{}{\PatchFailed}
+\makeatother
+\keywords{analysis blinding, R, open science, reproducible research, masking, scrambling}
+\usepackage{lineno}
+
+\linenumbers
+\usepackage{csquotes}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={vazul: An R Package for Analysis Blinding},
+  pdfauthor={Tamás Nagy1, Márton Kovács2, \& Alexandra Sarafoglou3},
+  pdflang={en-EN},
+  pdfkeywords={analysis blinding, R, open science, reproducible research, masking, scrambling},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{vazul: An R Package for Analysis Blinding}
+\author{Tamás Nagy\textsuperscript{1}, Márton Kovács\textsuperscript{2}, \& Alexandra Sarafoglou\textsuperscript{3}}
+\date{}
+
+
+\shorttitle{vazul: R Package for Analysis Blinding}
+
+\authornote{
+
+Tamás Nagy was supported by the University Excellence Fund of Eötvös Loránd University and the János Bolyai research fellowship. Alexandra Sarafoglou was supported by a 2024 Ammodo Science Award.
+
+The authors made the following contributions. Tamás Nagy: Conceptualization, Software, Writing - Original Draft Preparation.
+
+}
+
+\affiliation{\vspace{0.5cm}\textsuperscript{1} Institute of Psychology, ELTE Eötvös Loránd University\\\textsuperscript{2} Independent researcher\\\textsuperscript{3} Department of Psychology, University of Amsterdam}
+
+\abstract{%
+Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the vazul package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration.
+
+The package allows researchers to maintain analytic flexibility while safeguarding against bias. By using vazul, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs.
+}
+
+
+
+\begin{document}
+\maketitle
+
+\section{Introduction}\label{introduction}
+
+In data analysis, researchers face the challenge of maintaining objectivity and minimizing bias. A central concern is the considerable analytic flexibility present at various stages of the workflow, including data preprocessing, variable selection, model specification, and statistical testing. This flexibility has been described as the ``garden of forking paths'' (Gelman \& Loken, 2013), meaning that possibly hundreds or thousands of plausible, non-redundant analytic strategies can be applied to the same dataset (Simonsohn, Nelson, \& Simmons, 2020; Steegen, Tuerlinckx, Gelman, \& Vanpaemel, 2016). Crucially, different analytic paths can yield different results, and analysts may, intentionally or not, gravitate toward those that align with their expectations.
+
+The result can be biased or even spurious findings (Gelman \& Loken, 2016; Ioannidis, 2005b; Simmons, Nelson, \& Simonsohn, 2011), which have eroded trust in science and contributed to replication failures across medical sciences, psychology, economics, and computer science (Baker, 2016; Camerer et al., 2016; Cockburn, Dragicevic, Besançon, \& Gutwin, 2020; Ioannidis, 2005a; Nosek et al., 2022; Open Science Collaboration, 2015; Pashler \& Wagenmakers, 2012).\footnote{But see Gilbert, King, Pettigrew, and Wilson (2016), Muradchanian, Hoekstra, Kiers, and Ravenzwaaij (2021), Savitz et al. (2024), and McShane, Bradlow, Lynch Jr, and Meyer (2024) for critiques of how replication failure is measured and of the design and validity of some replication attempts.} To ensure the reliability of empirical findings, it is therefore essential to prevent the idiosyncrasies of the data from feeding back into the formulation of the hypotheses being tested (HARKing, Kerr, 1998) or from prompting researchers to exploit their analytic freedom to accentuate desired outcomes (Simmons et al., 2011). In response, researchers have proposed methodologies to limit the influence of bias in data analysis. One such method is analysis blinding, which supplies analysts with an altered version of the real data that conceals biasing features until the analysis plan is finalized.
+
+Analysis blinding, or blind analysis (R. MacCoun \& Perlmutter, 2015, 2018), is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts---for example, by scrambling dependent variables or masking condition labels. The procedure typically involves two independent parties: a data manager, who has full access to the raw data and is responsible for implementing the blinding steps, and an analyst, who is tasked with developing the analysis plan. After the data manager applies the blinding procedure, the analyst receives the resulting modified dataset: the blinded data.
+
+Working with the blinded data, the analyst can explore and preprocess the dataset and develop an analysis plan without being influenced by whether a particular analytic choice produces the desired result, as any patterns in the blinded data are, by design, only a product of chance. Importantly, although the test-relevant elements are concealed, other meaningful characteristics remain intact, including demographic information, secondary variables, and the distributional properties of both dependent and independent variables. As a result, the analyst retains all information necessary to tailor the analytic approach to the specific, and potentially unexpected, features of the data. Once the analysis plan has been finalized using the blinded data, the analyst is granted access to the raw, unblinded dataset, and the confirmatory analysis can then be carried out strictly according to the pre-established plan.
+
+Analysis blinding ties in with other methodologies to minimize bias in the research cycle, such as single-blind or double-blind experimental designs, where participants and/or experimenters are unaware of certain aspects of the study to prevent bias in data collection (Schulz \& Grimes, 2002). Here, the analysts are intentionally kept unaware of certain aspects of the data to prevent bias in data analysis, which is why the methodology is also referred to as triple-blind (Schulz \& Grimes, 2002).
+
+\subsection{The Two-Stage Workflow}\label{the-two-stage-workflow}
+
+To maintain the integrity of the blinding process, researchers should adhere to a strict two-stage workflow.
+
+\textbf{Stage 1: Blinded analysis script development.} In this stage, the data manager provides the analyst with a version of the data that has been blinded (e.g., processed using \textbf{vazul}). Crucially, the blinding transformation must be non-reversible. The analyst should not be able to reverse-engineer the masks or un-scramble the values to recover the original associations. All data cleaning, visualization, and model building are performed on this blinded set.
+
+\textbf{Stage 2: Unblinding and execution.} Once the analysis code is finalized and locked (e.g., by committing it to a repository or uploading it to a preregistration platform), the second stage begins. During unblinding, the analyst does not modify the code to accommodate the real data. Instead, they apply the finalized analysis code to the original, unblinded dataset. This ensures that the results are the product of decisions made in total ignorance of the statistical inferences (e.g., p-values) or effect sizes.
+
+Although many blinding techniques are conceptually straightforward, such as scrambling outcome variables or masking variable names and factor labels, their practical implementation can become technically challenging once real research designs and data structures are considered. For instance, in hierarchical models, researchers may need to scramble the outcome variable to destroy the effect of interest while still preserving information within grouping levels, such as country-level means in cross-cultural datasets (e.g., Sarafoglou, Hoogeveen, \& Wagenmakers, 2023a). Similarly, in repeated-measures designs, condition labels may need to be masked so that each participant's condition structure is preserved while permuting the mapping of conditions across participants to obscure the true experimental effect. These complexities make manual analysis blinding difficult to carry out consistently and correctly. To lower barriers for data managers and facilitate the broader adoption of analysis blinding in research labs, dedicated software tools, such as \textbf{R} packages, are needed to implement these procedures reliably.
+
+To meet this need, the \textbf{vazul}\footnote{Vazul was an 11th-century Hungarian prince of the Árpád dynasty, a cousin of King Stephen I (c.~975--1038). Around 1031, Vazul was blinded---according to contemporary chronicles-to make him unfit for succession to the throne. In the same spirit, the \textbf{vazul} package helps create blinded data that are unfit for p-hacking.} package (Nagy, Kovács, \& Sarafoglou, 2026) in \textbf{R} (R Core Team, 2025) offers flexible and reproducible tools for implementing analysis blinding. The \textbf{R} package provides functionality for data scrambling as well as data and variable masking. In the remainder of this article, we introduce the methodology in more detail, describe the functionalities of the \textbf{vazul} package, and illustrate its application through practical examples. We conclude with a brief discussion and outline future directions.
+
+\subsection{Analysis Blinding: Safeguarding Against Bias Without Preregistration}\label{analysis-blinding-safeguarding-against-bias-without-preregistration}
+
+Originally, analysis blinding gained traction in astrophysics in the early 2000s (R. MacCoun \& Perlmutter, 2018) as a means of safeguarding analysts against bias. Since then, the methodology has also been advocated in the social and behavioral sciences as an alternative or complement to preregistration (Aczel et al., 2020; Dutilh, Sarafoglou, \& Wagenmakers, 2019; Robert MacCoun, 2021; R. MacCoun \& Perlmutter, 2015, 2018; Nagy et al., 2025).
+
+This interest partly reflects the fact that analysis blinding addresses practical limitations of preregistration when analytic flexibility is required. While preregistration provides a valuable framework for increasing transparency, analysts may nonetheless encounter unexpected features of the data that necessitate deviations from the preregistered plan. Such deviations are common and often unavoidable, and when transparently reported and justified, they can enhance the credibility and validity of research findings (Lakens, 2024; Schneider, Rosman, Kelava, \& Merk, 2022; Song, Markowitz, \& Taylor, 2022; e.g., Van Den Akker et al., 2024).
+
+At the same time, preregistration offers limited guidance on how analytic decisions should be adapted in response to unforeseen data characteristics, and how such deviations should be interpreted with respect to confirmatory status. As a result, researchers may face a tension between adhering strictly to a preregistered plan and making principled, data-informed adjustments. Analysis blinding alleviates this tension by allowing analysts to flexibly develop and refine analysis plans using blinded data, before any test-relevant information is revealed.
+
+In contrast to preregistration, analysis blinding allows researchers to maintain flexibility in their analysis plans, as they can explore the data without being constrained by a rigid preregistered protocol. This flexibility is especially important in analyses involving advanced statistical modeling or preprocessing, where not all decisions can be anticipated in advance and researchers must make data-dependent choices. For instance, many psychological constructs, such as well-being, are measured with multi-item scales whose factor structure must be examined before further analysis; whether the items load onto a single factor or multiple factors determines subsequent analytic steps, including whether composite scores can be computed or whether a more complex measurement model is required (see e.g., Hoogeveen, Sarafoglou, van Elk, \& Wagenmakers, 2023). The flexibility gained by analysis blinding enables researchers to develop analysis strategies that are appropriately tailored to the specific characteristics of the dataset without the need to anticipate and specify all eventualities in advance. Consequently, researchers who analyze their data with analysis blinding are less likely to deviate from their developed analysis plan compared to researchers who preregister their analytic strategy in a text-based format (Sarafoglou et al., 2023a).
+
+Moreover, similar in spirit to approaches proposed in code-based preregistration (Peikert, Van Lissa, \& Brandmaier, 2021; Van Lissa et al., 2021), analysis blinding naturally produces analysis plans that are specific, precise, and exhaustive, because they are written directly in code rather than described verbally in preregistration templates. As with preregistration, analysis scripts based on the blinded data can be uploaded or attached to preregistration platforms (e.g., the Open Science Framework) to provide a transparent record of the planned analysis before the data are unblinded. In short, analysis blinding can serve as a valuable alternative or additional safeguard to preregistered analysis plans: it effectively protects against bias while providing analysts with the flexibility needed to develop an analysis strategy that is optimally suited to their data. Notably, even when the blinding code itself is shared, the original data cannot be recovered from the blinded dataset without access to the raw data, making analysis blinding compatible with transparent and open workflows.
+
+Analysis blinding can be particularly valuable for secondary data analysis, where the confirmatory power of preregistration is often compromised by prior exposure to the data (Thibault et al., 2023). In archival datasets, large-scale surveys, or shared repositories, researchers may already possess unavoidable knowledge of variable distributions or previously reported associations. By developing and finalizing analysis plans on a blinded version of the existing data, researchers can maintain analytic flexibility while providing a verifiable safeguard against post-hoc bias. This approach effectively protects the confirmatory status of the study in contexts where traditional preregistration might otherwise be perceived as impractical or insufficient.
+
+\section{Overview of the main functions}\label{overview-of-the-main-functions}
+
+The package provides functions for two main types of analysis blinding:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Masking}: Replaces original values with anonymous labels, completely hiding the original information.
+\item
+  \textbf{Scrambling}: Randomizes the order of existing values while preserving all original data content.
+\end{enumerate}
+
+\subsection{Choosing between masking and scrambling}\label{choosing-between-masking-and-scrambling}
+
+When choosing between masking and scrambling for analysis blinding, the decision usually turns on what information must be concealed and what structure must be preserved to allow for the development of a suitable analysis pipeline. Masking is most appropriate when the risk lies in the labels of categories rather than their relationships. By replacing group names (e.g., `Treatment' and `Control') with arbitrary codes (e.g., `Group A' and `Group B'), the group allocation is preserved. This allows analysts to perform group-level operations---such as ANOVA or regression---while remaining blinded to the substantive identity of those groups. Note, that since group-level distinctions remain intact, masking is best suited for workflows where knowing the direction of a difference would not inadvertently reveal the underlying category meaning. Masking also accommodates cases where different variables require different relabeling schemes or prefixes, for example when several independent categorical factors need to remain distinguishable but substantively opaque. This approach is common in clinical trials, behavioral experiments, and preregistered confirmatory analyses where preserving the structure of factors is essential but knowledge of factor identity would bias analytic choices. For instance, an analyst can check for data consistency across four masked study sites (e.g., ``Site A'' through ``Site D'') to ensure uniform data quality without knowing the specific geographic locations. This preserves the site-level grouping for variance testing while preventing biased assumptions about data from specific regions.
+
+Masking can be indispensable in situations where the variable names themselves carry substantive meaning. This occurs, for example, in network analysis, where variables become nodes with interpretable labels, or in factor-analytic work, where item names often hint at their latent content (Hoekstra, Huth, Sekulovski, Delhalle, \& Sarafoglou, 2025). In such settings, simply scrambling values would not prevent analysts from inferring the underlying constructs, whereas masking removes this semantic cue entirely. The \textbf{vazul} package supports this use case directly by offering functionality for masking variable names alongside their values.
+
+Scrambling becomes the better choice when the goal is to preserve the marginal distributions of numeric variables while severing their hypothesized associations. It is particularly useful in settings where analysts need access to realistic distributions---variance, skew---to make decisions about transformations, model families, or robustness checks, yet must remain blind to the relationship between predictors and outcomes. By permuting values within variables, scrambling prevents recognition of treatment or experimental effects, correlations, or temporal patterns, making it harder to inadvertently tune an analysis toward the desired result. It is often the preferred option in longitudinal studies, high-dimensional observational datasets where categorical relabeling would either destroy important numeric structure or be easy to reverse-engineer (e.g., in case of three experimental conditions, the researcher may guess which one is which based on the means). Scrambling is generally the more versatile option, because it can be applied across variable types and adapts well to a wide range of study designs and analytic workflows. Its ability to break associations while preserving distributions makes it suitable for almost everything from tightly controlled experiments to complex observational datasets, including high-dimensional or mixed-format data (Sarafoglou \& Hoogeveen, 2025; Sarafoglou, Hoogeveen, \& Wagenmakers, 2023b).
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1802}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4414}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3784}}@{}}
+\caption{Comparison of masking and scrambling approaches for analysis blinding.}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Aspect}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Masking}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Scrambling}
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Aspect}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Masking}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Scrambling}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Original values & Replaced with arbitrary codes & Preserved but permuted \\
+Data distribution & Category counts preserved with different labels & Marginal distributions fully preserved \\
+Associations with blinded variables & Preserved & Broken (correlations, treatment--outcome links removed) \\
+Risk addressed & Hiding the identity or meaning of categories or variable names & Preventing recognition of true relationships or effects \\
+Best suited for & Categorical variables with many different labels; variables whose names convey substantive meaning & Numeric or categorical variables; mixed-type data \\
+Typical use cases & Clinical trials, behavioral experiments, network analysis, factor analysis & Longitudinal data, observational datasets, robustness checks \\
+When essential & When variable names or category labels carry substantive information & When analysts need realistic numeric structure but must remain blind to associations \\
+Flexibility across research settings & Limited by categorical/semantic constraints & Broadly applicable to most data types and study designs \\
+\end{longtable}
+
+In the \textbf{vazul} package, each approach is available at three levels:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Vector level}: \texttt{mask\_labels()} and \texttt{scramble\_values()} - operate on single vectors
+\item
+  \textbf{Data frame level}: \texttt{mask\_variables()} and \texttt{scramble\_variables()} - operate on columns in a data frame
+\item
+  \textbf{Row-wise level}: \texttt{scramble\_variables(...,\ .byrow\ =\ TRUE)} - operates within rows across columns.
+\end{itemize}
+
+The design of these three levels reflects the common ways researchers interact with data in \textbf{R}. Vector-level functions are the primary building blocks, designed for simple pipelines where a researcher might want to blind a single outcome or a specific grouping factor. These functions are particularly useful when working with \textbf{dplyr}'s \texttt{mutate()} or within custom functions where a specific variable needs to be isolated and transformed without affecting the rest of the environment (Wickham, François, Henry, Müller, \& Vaughan, 2025). By providing these atomic operations, \textbf{vazul} ensures that the core blinding logic remains accessible even for non-standard data structures.
+
+Moving to the data frame and row-wise levels, the package addresses more complex research designs. Data frame-level functions allow for bulk operations, which are essential for datasets with dozens of variables requiring consistent masking or independent scrambling. The row-wise operations solve a frequent headache in repeated-measures and longitudinal research. In these designs, the ``unit'' of analysis is often spread across multiple columns (e.g., independent varibles in factorial designs); the row-wise functions ensure that the relationship within a participant's data is handled correctly---either by scrambling values across those specific time points for each person or by applying a consistent mask that hides the identity of the measurement while preserving the participant-level structure. It is important to note that while \textbf{vazul} supports row-wise scrambling, it does not provide a row-wise masking function. Masking across different variables within a single observation lacks a clear methodological justification in analysis blinding, as masking is intended to obscure values while preserving their distributional properties (see later for alternative solutions).
+
+All of the functions require a data frame or vector as input and return a modified version with masked or scrambled values. The original data structure, including class attributes and metadata, is carefully preserved to ensure that the blinded data can be passed directly into existing analysis scripts or visualization packages without requiring additional type conversions.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3846}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2692}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3462}}@{}}
+\caption{Overview of \textbf{vazul} functions for masking and scrambling data}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Function
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Level
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Purpose
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Function
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Level
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Purpose
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{mask\_labels()} & Vector & Replace categorical values with anonymous labels \\
+\texttt{mask\_variables()} & Data frame & Mask multiple columns \\
+\texttt{mask\_names()} & Variable names & Mask column names \\
+\texttt{scramble\_values()} & Vector & Randomize value order \\
+\texttt{scramble\_variables()} & Data frame & Scramble multiple columns \\
+\texttt{scramble\_variables(...,\ .byrow\ =\ TRUE)} & Row-wise & Scramble values within rows \\
+\end{longtable}
+
+The \textbf{vazul} package is open source and distributed via CRAN and GitHub (\url{https://github.com/nthun/vazul}). All analyses reported here were conducted using version 1.1.0.
+
+In the following sections, we provide detailed descriptions and examples for each of these functions, illustrating their use cases and practical applications in research workflows. We starts with setting up the environment and loading the included datasets.
+
+\subsection{Included datasets}\label{included-datasets}
+
+The \textbf{vazul} package includes two research datasets for demonstration and practice. The \texttt{marp} dataset contains cross-national survey data on religiosity (Hoogeveen et al., 2023), while the \texttt{williams} dataset contains experimental data from a stereotyping study (Holzmeister et al., 2025; Sarafoglou \& Hoogeveen, 2025).
+
+\subsection{Masking functions}\label{masking-functions}
+
+Masking functions replace categorical values with anonymous labels. This is useful when you want to hide the original information, such as treatment conditions or group assignments, and there are a limited number of unique values. The \texttt{mask\_labels()} function takes a character or factor type vector and replaces each unique value with a randomly assigned masked label. The function preserves factor structure when the input is a factor. After masking, each unique value receives a unique masked label, the same original value always maps to the same masked label, and the assignment of masked labels to original values is randomized. Missing values are preserved during masking.
+
+\begin{verbatim}
+## [1] "masked_group_01" "masked_group_02" "masked_group_03" "masked_group_01"
+## [5] "masked_group_02" "masked_group_03"
+\end{verbatim}
+
+It is possible to customize the prefix used for masked labels:
+
+\begin{verbatim}
+## [1] "group_01" "group_02" "group_03" "group_01" "group_02" "group_03"
+\end{verbatim}
+
+The \texttt{mask\_variables()} function extends the masking functionality to multiple columns in a data frame simultaneously. It is possible to use tidyelect helpers to select columns. for instance, in the MARP dataset, we want to simultaneously mask labels within the columns ``country'' and ``denomination''. To make the example manageable, we first create a smaller example dataset with 10 random rows. Then we demonstrate how to use \texttt{mask\_variables()} to mask the selected columns. It is possible to use tidyselect helpers (such as \texttt{starts\_with()}, \texttt{any\_of()}, etc.) to select columns. In the next example, we apply masking to all character columns in the example dataset.
+
+\begin{verbatim}
+##   subject country               denomination
+## 1    5011   India Christian (Roman Catholic)
+## 2    4015 Germany Christian (Roman Catholic)
+## 3    4271 Germany                Evangelical
+## 4    4591 Germany                       <NA>
+## 5   10225      US Christian (Roman Catholic)
+## 6    9060   Spain                       <NA>
+\end{verbatim}
+
+\begin{verbatim}
+##   subject          country          denomination
+## 1    5011 country_group_01 denomination_group_01
+## 2    4015 country_group_03 denomination_group_01
+## 3    4271 country_group_03 denomination_group_02
+## 4    4591 country_group_03                  <NA>
+## 5   10225 country_group_04 denomination_group_01
+## 6    9060 country_group_02                  <NA>
+\end{verbatim}
+
+\begin{verbatim}
+##   subject          country          denomination
+## 1    5011 country_group_04 denomination_group_01
+## 2    4015 country_group_02 denomination_group_01
+## 3    4271 country_group_02 denomination_group_02
+## 4    4591 country_group_02                  <NA>
+## 5   10225 country_group_03 denomination_group_01
+## 6    9060 country_group_01                  <NA>
+\end{verbatim}
+
+By default, each column gets its own set of masked labels with the column name as prefix. When \texttt{.across\_variables\ =\ TRUE}, all selected columns share the same mapping. A crucial feature for longitudinal or repeated-measures data in wide format is the \texttt{.across\_variables} parameter. When set to \texttt{TRUE}, it ensures that all selected variables are masked using the same transformation or mapping. This preserves the relative differences or associtions between time points while hiding the true values from the analyst. For example, in the dataset below, we have two columns representing pre- and post-treatment conditions. By applying \texttt{mask\_variables()} with \texttt{.across\_variables\ =\ TRUE}, we ensure that the same original condition (e.g., ``A'') is masked to the same new label across both columns, preserving the relationship between pre- and post-conditions while concealing their true identities.
+
+\begin{verbatim}
+##   pre_condition post_condition id
+## 1             A              B  1
+## 2             B              D  2
+## 3             C              D  3
+## 4             D              C  4
+\end{verbatim}
+
+\begin{verbatim}
+##     pre_condition  post_condition id
+## 1 masked_group_02 masked_group_01  1
+## 2 masked_group_01 masked_group_04  2
+## 3 masked_group_03 masked_group_04  3
+## 4 masked_group_04 masked_group_03  4
+\end{verbatim}
+
+\subsubsection{Masking variable names}\label{masking-variable-names}
+
+The \texttt{mask\_names()} function allows users to rename variables in a dataset to anonymous, generic labels. This is especially useful in analyses where variable names carry substantive meaning (e.g., questionnaire items, network nodes, test-items), and one wants to prevent analysts from recognizing which item is which during preprocessing or exploratory phases.
+
+The \texttt{mask\_names()} function takes a data frame and one or more variable sets, which can be specified either with tidyselect expressions (e.g., \texttt{starts\_with("Q")}) or as character vectors of column names. The \texttt{prefix} argument sets the base for the masked names. For instance, in the \texttt{williams} data we can blind all variables that are related to the impulsivity scale.
+
+\begin{verbatim}
+##  [1] "subject"             "SexUnres_1"          "SexUnres_2"         
+##  [4] "SexUnres_3"          "SexUnres_4_r"        "SexUnres_5_r"       
+##  [7] "Impuls_1"            "Impuls_2_r"          "Impul_3_r"          
+## [10] "Opport_1"            "Opport_2"            "Opport_3"           
+## [13] "Opport_4"            "Opport_5"            "Opport_6_r"         
+## [16] "InvEdu_1_r"          "InvEdu_2_r"          "InvChild_1"         
+## [19] "InvChild_2_r"        "age"                 "gender"             
+## [22] "ecology"             "duration_in_seconds" "attention_1"        
+## [25] "attention_2"
+\end{verbatim}
+
+\begin{verbatim}
+##  [1] "subject"             "SexUnres_1"          "SexUnres_2"         
+##  [4] "SexUnres_3"          "SexUnres_4_r"        "SexUnres_5_r"       
+##  [7] "masked_02"           "masked_01"           "masked_03"          
+## [10] "Opport_1"            "Opport_2"            "Opport_3"           
+## [13] "Opport_4"            "Opport_5"            "Opport_6_r"         
+## [16] "InvEdu_1_r"          "InvEdu_2_r"          "InvChild_1"         
+## [19] "InvChild_2_r"        "age"                 "gender"             
+## [22] "ecology"             "duration_in_seconds" "attention_1"        
+## [25] "attention_2"
+\end{verbatim}
+
+Use multiple \texttt{mask\_names()} calls to blind different sets of variables independently. Assigning distinct prefixes allows variables to be anonymized while preserving information about their original clusters. For example, an analyst can recognize that a set of variables belongs to the same construct---enabling procedures such as factor analysis or reliability estimation---without knowing which specific items are being evaluated. The example below demonstrates this clustered masking approach in a pipe-based workflow.
+
+\begin{verbatim}
+##  [1] "subject"             "masked_set_A_03"     "masked_set_A_04"    
+##  [4] "masked_set_A_01"     "masked_set_A_02"     "masked_set_A_05"    
+##  [7] "masked_set_B_01"     "masked_set_B_02"     "masked_set_B_03"    
+## [10] "masked_set_C_06"     "masked_set_C_01"     "masked_set_C_05"    
+## [13] "masked_set_C_02"     "masked_set_C_04"     "masked_set_C_03"    
+## [16] "masked_set_D_01"     "masked_set_D_02"     "masked_set_E_02"    
+## [19] "masked_set_E_01"     "age"                 "gender"             
+## [22] "ecology"             "duration_in_seconds" "attention_1"        
+## [25] "attention_2"
+\end{verbatim}
+
+Once masked, one can proceed with analyses (e.g.~factor analysis, network analysis) on the masked variables, without knowing which original items correspond to which columns. For example, we can run a factor analysis on the masked items:
+
+\begin{verbatim}
+## 
+## Loadings:
+##                 Factor1 Factor2 Factor3
+## masked_set_A_03  0.648           0.504 
+## masked_set_A_04  0.705                 
+## masked_set_A_01  0.730           0.340 
+## masked_set_B_01  0.751                 
+## masked_set_C_06  0.873                 
+## masked_set_C_01  0.833                 
+## masked_set_C_05  0.866                 
+## masked_set_C_02  0.761                 
+## masked_set_C_04  0.863                 
+## masked_set_E_02  0.770                 
+## masked_set_A_02          0.745   0.306 
+## masked_set_A_05          0.568         
+## masked_set_B_02          0.861         
+## masked_set_B_03          0.740         
+## masked_set_C_03          0.696         
+## masked_set_D_01          0.695         
+## masked_set_D_02          0.841         
+## masked_set_E_01          0.865         
+## 
+##                Factor1 Factor2 Factor3
+## SS loadings      6.314   4.842   0.731
+## Proportion Var   0.351   0.269   0.041
+## Cumulative Var   0.351   0.620   0.660
+\end{verbatim}
+
+Because the column names are anonymized, any decisions about factor inclusion or rotation are made blind to the substantive meaning of items, reducing the risk of interpretive bias.
+
+In short, \texttt{mask\_names()} supports naming-based blinding by decoupling analysis from semantic content, while preserving the full data structure needed for legitimate exploratory workflows.
+
+\subsection{Scrambling functions}\label{scrambling-functions}
+
+Scrambling functions randomize the order of values while preserving all original data content. This approach maintains the data distribution while breaking the connection between observations and their original values. The \texttt{scramble\_values()} function randomly reorders the elements of a vector. The vector can contain numeric, character, or factor type data. Scrambling is useful when we want to preserve the original values but eliminate any correspondence between observations and their values.
+
+\begin{verbatim}
+##  [1]  2  1  5  7  9 10  3  8  6  4
+\end{verbatim}
+
+The \texttt{scramble\_variables()} function extends the scrambling functionality to data frames. It allows scrambling multiple columns simultaneously, with options for independent scrambling, joint scrambling, and within-group scrambling. Columns can be selected using tidyselect helpers. For instance, in the williams data we could choose to scramble the columns age (a demographic variable) and ecology (the identifier of the experimental condition) as follows:
+
+\begin{verbatim}
+## # A tibble: 6 x 3
+##   subject          age ecology  
+##   <chr>          <dbl> <chr>    
+## 1 A30MP4LXV4MIFD    34 Hopeful  
+## 2 A16X5FB3HAFCKN    30 Desperate
+## 3 A1E9D1OT9VJYDZ    40 Desperate
+## 4 A16FPOYD7566WI    35 Hopeful  
+## 5 A11NOTVHWST7Y3    26 Desperate
+## 6 A3TDR6MXS6UO5Z    33 Desperate
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 6 x 3
+##   subject          age ecology  
+##   <chr>          <dbl> <chr>    
+## 1 A30MP4LXV4MIFD    30 Desperate
+## 2 A16X5FB3HAFCKN    40 Desperate
+## 3 A1E9D1OT9VJYDZ    33 Hopeful  
+## 4 A16FPOYD7566WI    26 Desperate
+## 5 A11NOTVHWST7Y3    35 Hopeful  
+## 6 A3TDR6MXS6UO5Z    34 Desperate
+\end{verbatim}
+
+By default, columns are scrambled independently. Setting \texttt{.together\ =\ TRUE} causes the selected columns to be scrambled jointly, preserving their row-wise associations. Adding this argument to the previous example therefore maintains the relationship between the two scrambled variables.
+
+\begin{verbatim}
+## # A tibble: 6 x 3
+##   subject          age ecology  
+##   <chr>          <dbl> <chr>    
+## 1 A30MP4LXV4MIFD    34 Hopeful  
+## 2 A16X5FB3HAFCKN    40 Desperate
+## 3 A1E9D1OT9VJYDZ    30 Desperate
+## 4 A16FPOYD7566WI    35 Hopeful  
+## 5 A11NOTVHWST7Y3    26 Desperate
+## 6 A3TDR6MXS6UO5Z    33 Desperate
+\end{verbatim}
+
+Scrambling can be done in groups using the \texttt{.groups} parameter. This ensures that values are only scrambled within their original groups. In the following example, we scramble the columns x and y within each group defined by the group column:
+
+\begin{verbatim}
+##   x y group
+## 1 1 a     A
+## 2 2 b     A
+## 3 3 c     A
+## 4 4 d     B
+## 5 5 e     B
+## 6 6 f     B
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 6 x 3
+##       x y     group
+##   <int> <chr> <chr>
+## 1     2 b     A    
+## 2     3 c     A    
+## 3     1 a     A    
+## 4     5 f     B    
+## 5     6 e     B    
+## 6     4 d     B
+\end{verbatim}
+
+Unlike masking, row-wise operation is highly relevant for scrambling. Row-wise scrambling is performed using \texttt{scramble\_variables()} with the \texttt{.byrow\ =\ TRUE} argument. This is useful for scrambling repeated measures or item responses. Within each row, the values are shuffled among the item columns. You can scramble multiple sets of columns independently. The function can use tidyselect helpers. In the next example, we scramble values across three day variables for each participant in a hypothetical dataset:
+
+\begin{verbatim}
+##   day_1 day_2 day_3 score_a score_b id
+## 1     1     2     3      10      20  1
+## 2     4     5     6      40      50  2
+## 3     7     8     9      70      80  3
+\end{verbatim}
+
+\begin{verbatim}
+##   day_1 day_2 day_3 score_a score_b id
+## 1     2    20     3       1      10  1
+## 2     4    50     6      40       5  2
+## 3     7     8    80      70       9  3
+\end{verbatim}
+
+\section{Summary}\label{summary}
+
+The introduction of \textbf{vazul} fills a notable gap in the \textbf{R} ecosystem, as no dedicated package currently exists to specifically address the diverse requirements of analysis blinding. While some basic blinding tasks---such as simple vector permutations---can be achieved using base \textbf{R} or \textbf{tidyverse} functions like sample() or mutate(), these manual approaches quickly become error-prone as study designs grow in complexity. When dealing with multiple independent variables, hierarchical data structures, or the need for consistent masking across several columns, the risk of ``breaking'' the data structure or accidentally unblinding the analyst increases significantly. By providing a unified and tested framework, \textbf{vazul} abstracts these technical intricacies, and allow researchers to focus on the conceptual rigor of their analysis plans rather than the underlying data manipulation logic.
+
+The functions implemented in \textbf{vazul} are applicable to a wide range of paradigms and data structures and simplify the blinding process, which in turn facilitates the assignment of data-blinding roles within research teams. Specifically, since data blinding no longer requires implementing custom code the data-manager role need not be filled by an expert in the analytic method or data domain. Instead, junior lab members or external collaborators can manage data blinding, while domain experts develop the analytic strategy.
+
+Beyond standalone use in \textbf{R} scripts, the package's modular design makes it an ideal candidate for integration into other statistical software platforms. For instance, the inclusion of \textbf{vazul} as a back-end for the \textbf{JASP} (JASP Team, 2025) graphical interface could provide a point-and-click solution for analysis blinding, further facilitating the adoption of these best practices across the social and behavioral sciences.
+
+\section{Acknowledgements}\label{acknowledgements}
+
+Tamás Nagy was supported by the University Excellence Fund of Eötvös Loránd University, Budapest, Hungary (ELTE), and the János Bolyai research fellowship of the Hungarian Academy of Sciences. Alexandra Sarafoglou was supported by an 2024 Ammodo Science Award.
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-aczel2020transparency}
+Aczel, B., Szaszi, B., Sarafoglou, A., Kekecs, Z., Kucharský, Š., Benjamin, D., \ldots{} Wagenmakers, E.-J. (2020). A consensus-based transparency checklist. \emph{Nature Human Behaviour}, \emph{4}, 4--6. \url{https://doi.org/10.1038/s41562-019-0772-6}
+
+\bibitem[\citeproctext]{ref-baker2016scientists}
+Baker, M. (2016). 1,500 scientists lift the lid on reproducibility. \emph{Nature News}, \emph{533}, 452. \url{https://doi.org/10.1038/533452a}
+
+\bibitem[\citeproctext]{ref-camerer2016evaluating}
+Camerer, C. F., Dreber, A., Forsell, E., Ho, T.-H., Huber, J., Johannesson, M., et al.others. (2016). Evaluating replicability of laboratory experiments in economics. \emph{Science}, \emph{351}(6280), 1433--1436. \url{https://doi.org/10.1126/science.aaf0918}
+
+\bibitem[\citeproctext]{ref-cockburn2020threats}
+Cockburn, A., Dragicevic, P., Besançon, L., \& Gutwin, C. (2020). Threats of a replication crisis in empirical computer science. \emph{Communications of the ACM}, \emph{63}(8), 70--79. \url{https://doi.org/10.1145/3360311}
+
+\bibitem[\citeproctext]{ref-dutilh2021blinding}
+Dutilh, G., Sarafoglou, A., \& Wagenmakers, E.-J. (2019). Flexible yet fair: {B}linding analyses in experimental psychology. \emph{Synthese}, \emph{198}, S5745--S5772. \url{https://doi.org/10.1007/s11229-019-02456-7}
+
+\bibitem[\citeproctext]{ref-gelman2013garden}
+Gelman, A., \& Loken, E. (2013). The garden of forking paths: {W}hy multiple comparisons can be a problem, even when there is no "fishing expedition" or "p-hacking" and the research hypothesis was posited ahead of time. \emph{Department of Statistics, Columbia University}, \emph{348}. Retrieved from \url{http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf}
+
+\bibitem[\citeproctext]{ref-gelman2016statistical}
+Gelman, A., \& Loken, E. (2016). The statistical crisis in science. In M. Pitici (Ed.), \emph{The best writing on mathematics} (Vol. 102, pp. 305--318). Princeton University Press.
+
+\bibitem[\citeproctext]{ref-gilbert2016}
+Gilbert, D. T., King, G., Pettigrew, S., \& Wilson, T. D. (2016). Comment on {``estimating the reproducibility of psychological science.''} \emph{Science}, \emph{351}(6277), 1037--1037. \url{https://doi.org/10.1126/science.aad7243}
+
+\bibitem[\citeproctext]{ref-Hoekstra2025-ub}
+Hoekstra, R. H. A., Huth, K., Sekulovski, N., Delhalle, M., \& Sarafoglou, A. (2025). Safeguarding against bias without preregistration: A tutorial on analysis blinding for network analysis. \emph{PsyArXiv}. \url{https://doi.org/10.31234/osf.io/gruw5/_v1}
+
+\bibitem[\citeproctext]{ref-Holzmeister2025-vf}
+Holzmeister, F., Johannesson, M., Camerer, C. F., Chen, Y., Ho, T.-H., Hoogeveen, S., \ldots{} Dreber, A. (2025). Examining the replicability of online experiments selected by a decision market. \emph{Nature Human Behaviour}, \emph{9}(2), 316--330. \url{https://doi.org/10.1038/s41562-024-02062-9}
+
+\bibitem[\citeproctext]{ref-MARP2022discussion}
+Hoogeveen, S., Sarafoglou, A., van Elk, M., \& Wagenmakers, E.-J. (2023). A many-analysts approach to the relation between religiosity and well-being: {Reflection} and conclusion. \emph{Religion, Brain, \& Behaviour}, \emph{13}(3), 356--363. \url{https://doi.org/10.1080/2153599X.2022.2070263}
+
+\bibitem[\citeproctext]{ref-ioannidis2005contradicted}
+Ioannidis, J. P. (2005a). Contradicted and initially stronger effects in highly cited clinical research. \emph{JAMA}, \emph{294}(2), 218--228. \url{https://doi.org/10.1001/jama.294.2.218}
+
+\bibitem[\citeproctext]{ref-ioannidis2005most}
+Ioannidis, J. P. (2005b). Why most published research findings are false. \emph{PLoS Medicine}, \emph{2}(8), e124. \url{https://doi.org/10.1371/journal.pmed.1004085}
+
+\bibitem[\citeproctext]{ref-JASP2025}
+JASP Team. (2025). \emph{{JASP (Version 0.95.4){[}Computer software{]}}}. Retrieved from \url{https://jasp-stats.org/}
+
+\bibitem[\citeproctext]{ref-kerr1998harking}
+Kerr, N. L. (1998). {HARK}ing: {H}ypothesizing after the results are known. \emph{Personality and Social Psychology Review}, \emph{2}, 196--217. \url{https://doi.org/10.1207/s15327957pspr0203_4}
+
+\bibitem[\citeproctext]{ref-Lakens2024-tj}
+Lakens, D. (2024). When and how to deviate from a preregistration. \emph{Collabra. Psychology}, \emph{10}(1), 117094. \url{https://doi.org/10.1525/collabra.117094}
+
+\bibitem[\citeproctext]{ref-maccoun2021removebiases}
+MacCoun, Robert. (2021). Blinding to remove biases in science and society. In R. Hertwig \& C. Engel (Eds.), \emph{Deliberate ignorance: {C}hoosing not to know} (pp. 51--64). Cambridge: MIT Press.
+
+\bibitem[\citeproctext]{ref-maccoun2015hide}
+MacCoun, R., \& Perlmutter, S. (2015). Blind analysis: {H}ide results to seek the truth. \emph{Nature}, \emph{526}, 187--190. \url{https://doi.org/10.1038/526187a}
+
+\bibitem[\citeproctext]{ref-maccoun2018psychological}
+MacCoun, R., \& Perlmutter, S. (2018). Blind analysis as a correction for confirmatory bias in physics and in psychology. In S. O. Lilienfeld \& I. Waldman (Eds.), \emph{Psychological science under scrutiny: {R}ecent challenges and proposed solutions} (pp. 297--322). John Wiley; Sons. \url{https://doi.org/10.1002/9781119095910.ch15}
+
+\bibitem[\citeproctext]{ref-mcshane2024statistical}
+McShane, B. B., Bradlow, E. T., Lynch Jr, J. G., \& Meyer, R. J. (2024). {``Statistical significance''} and statistical reporting: Moving beyond binary. \emph{Journal of Marketing}, 00222429231216910. \url{https://doi.org/10.1177/00222429231216910}
+
+\bibitem[\citeproctext]{ref-muradchanian2021best}
+Muradchanian, J., Hoekstra, R., Kiers, H., \& Ravenzwaaij, D. van. (2021). How best to quantify replication success? {A} simulation study on the comparison of replication success metrics. \emph{Royal Society Open Science}, \emph{8}, 201697. \url{https://doi.org/10.1098/rsos.201697}
+
+\bibitem[\citeproctext]{ref-nagy2025bestiary}
+Nagy, T., Hergert, J., Elsherif, M. M., Wallrich, L., Schmidt, K., Waltzer, T., \ldots{} Rubínová, E. (2025). Bestiary of {Questionable} {Research} {Practices} in psychology. \emph{Advances in Methods and Practices in Psychological Science}, \emph{8}(3), 25152459251348431. \url{https://doi.org/10.1177/25152459251348431}
+
+\bibitem[\citeproctext]{ref-Nagy2026-gb}
+Nagy, T., Kovács, M., \& Sarafoglou, A. (2026). \emph{Vazul: An {R} package for analysis blinding}. Zenodo. \url{https://doi.org/10.5281/ZENODO.18269712}
+
+\bibitem[\citeproctext]{ref-nosek2022replicability}
+Nosek, B. A., Hardwicke, T. E., Moshontz, H., Allard, A., Corker, K. S., Dreber, A., et al.others. (2022). Replicability, robustness, and reproducibility in psychological science. \emph{Annual Review of Psychology}, \emph{73}, 719--748. \url{https://doi.org/10.1146/annurev-psych-020821-114157}
+
+\bibitem[\citeproctext]{ref-open2015estimating}
+Open Science Collaboration. (2015). Estimating the reproducibility of psychological science. \emph{Science}, \emph{349}, aac4716. \url{https://doi.org/10.1126/science.aac4716}
+
+\bibitem[\citeproctext]{ref-pashler2012editors}
+Pashler, H., \& Wagenmakers, E.-J. (2012). Editors' introduction to the special section on replicability in psychological science: {A} crisis of confidence? \emph{Perspectives on Psychological Science}, \emph{7}, 528--530. \url{https://doi.org/10.1177/1745691612465253}
+
+\bibitem[\citeproctext]{ref-peikert2021reproducible}
+Peikert, A., Van Lissa, C. J., \& Brandmaier, A. M. (2021). Reproducible research in {R}: {A} tutorial on how to do the same thing more than once. \emph{Psych}, \emph{3}(4), 836--867. \url{https://doi.org/10.3390/psych3040053}
+
+\bibitem[\citeproctext]{ref-R2025}
+R Core Team. (2025). \emph{R: A language and environment for statistical computing}. Vienna, Austria: R Foundation for Statistical Computing. Retrieved from \url{https://www.R-project.org/}
+
+\bibitem[\citeproctext]{ref-Sarafoglou2025-fr}
+Sarafoglou, A., \& Hoogeveen, S. (2025). Analysis blinding as a potential means to foster a productive collaboration between original authors and replicators. \emph{Collabra. Psychology}, \emph{11}(1), 136869. \url{https://doi.org/10.1525/collabra.136869}
+
+\bibitem[\citeproctext]{ref-sarafoglou2023comparing}
+Sarafoglou, A., Hoogeveen, S., \& Wagenmakers, E.-J. (2023a). Comparing analysis blinding with preregistration in the {Many-Analysts Religion Project}. \emph{Advances in Methods and Practices in Psychological Science}, \emph{6}(1), 25152459221128319. \url{https://doi.org/10.1177/25152459221128319}
+
+\bibitem[\citeproctext]{ref-Sarafoglou2023-rf}
+Sarafoglou, A., Hoogeveen, S., \& Wagenmakers, E.-J. (2023b). Comparing analysis blinding with preregistration in the many-analysts religion project. \emph{Advances in Methods and Practices in Psychological Science}, \emph{6}(1), 25152459221128319. \url{https://doi.org/10.1177/25152459221128319}
+
+\bibitem[\citeproctext]{ref-savitz2024responding}
+Savitz, D. A., Wise, L. A., Bond, J. C., Hatch, E. E., Ncube, C. N., Wesselink, A. K., \ldots{} Rothman, K. J. (2024). Responding to reviewers and editors about statistical significance testing. \emph{Annals of Internal Medicine}, \emph{177}, 385--386. \url{https://doi.org/10.7326/M23-2430}
+
+\bibitem[\citeproctext]{ref-Schneider2022-oq}
+Schneider, J., Rosman, T., Kelava, A., \& Merk, S. (2022). Do open-science badges increase trust in scientists among undergraduates, scientists, and the public? \emph{Psychological Science}, \emph{33}(9), 1588--1604. \url{https://doi.org/10.1177/09567976221097499}
+
+\bibitem[\citeproctext]{ref-schulz2002blinding}
+Schulz, K. F., \& Grimes, D. A. (2002). Blinding in randomised trials: {Hiding} who got what. \emph{The Lancet}, \emph{359}(9307), 696--700.
+
+\bibitem[\citeproctext]{ref-simmons2011false}
+Simmons, J. P., Nelson, L. N., \& Simonsohn, U. (2011). False--positive psychology: {U}ndisclosed flexibility in data collection and analysis allows presenting anything as significant. \emph{Psychological Science}, \emph{22}, 1359--1366. \url{https://doi.org/10.1177/0956797611417632}
+
+\bibitem[\citeproctext]{ref-SimonsohnEtAl2020}
+Simonsohn, U., Nelson, L. D., \& Simmons, J. P. (2020). Specification curve analysis. \emph{Nature Human Behaviour}, \emph{4}, 1208--1214. \url{https://doi.org/10.1038/s41562-020-0912-z}
+
+\bibitem[\citeproctext]{ref-Song2022-em}
+Song, H., Markowitz, D. M., \& Taylor, S. H. (2022). Trusting on the shoulders of open giants? Open science increases trust in science for the public and academics. \emph{The Journal of Communication}, \emph{72}(4), 497--510. \url{https://doi.org/10.1093/joc/jqac017}
+
+\bibitem[\citeproctext]{ref-steegen2016increasing}
+Steegen, S., Tuerlinckx, F., Gelman, A., \& Vanpaemel, W. (2016). Increasing transparency through a multiverse analysis. \emph{Perspectives on Psychological Science}, \emph{11}, 702--712. \url{https://doi.org/10.1177/1745691616658637}
+
+\bibitem[\citeproctext]{ref-Thibault2023-of}
+Thibault, R. T., Kovacs, M., Hardwicke, T. E., Sarafoglou, A., Ioannidis, J. P. A., \& Munafò, M. R. (2023). Reducing bias in secondary data analysis via an explore and confirm analysis workflow ({ECAW}): A proposal and survey of observational researchers. \emph{Royal Society Open Science}, \emph{10}(10), 230568. \url{https://doi.org/10.1098/rsos.230568}
+
+\bibitem[\citeproctext]{ref-vandenakker2024potential}
+Van Den Akker, O. R., Bakker, M., Van Assen, M. A. L. M., Pennington, C. R., Verweij, L., Elsherif, M. M., \ldots{} Wicherts, J. M. (2024). The potential of preregistration in psychology: {Assessing} preregistration producibility and preregistration-study consistency. \emph{Psychological Methods}. \url{https://doi.org/10.1037/met0000687}
+
+\bibitem[\citeproctext]{ref-vanlissa2021worcs}
+Van Lissa, C. J., Brandmaier, A. M., Brinkman, L., Lamprecht, A.-L., Peikert, A., Struiksma, M. E., \& Vreede, B. M. (2021). {WORCS}: {A} workflow for open reproducible code in science. \emph{Data Science}, \emph{4}(1), 29--49. \url{https://doi.org/10.3233/DS-210031}
+
+\bibitem[\citeproctext]{ref-Wickham2025-eh}
+Wickham, H., François, R., Henry, L., Müller, K., \& Vaughan, D. (2025). \emph{Dplyr: A grammar of data manipulation}. Retrieved from \url{https://dplyr.tidyverse.org}
+
+\end{CSLReferences}
+
+
+\end{document}

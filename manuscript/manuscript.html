@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { color: #00769e; background-color: #f1f3f5; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span { color: #00769e; } /* Normal */
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #657422; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #00769e; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #00769e; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #00769e; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+<style>
+  div.csl-bib-body { }
+  div.csl-entry {
+    clear: both;
+      margin-bottom: 0em;
+    }
+  .hanging div.csl-entry {
+    margin-left:2em;
+    text-indent:-2em;
+  }
+  div.csl-left-margin {
+    min-width:2em;
+    float:left;
+  }
+  div.csl-right-inline {
+    margin-left:2em;
+    padding-left:1em;
+  }
+  div.csl-indent {
+    margin-left: 2em;
+  }
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+  <title>vazul: An R Package for Analysis Blinding</title>
+
+  <meta property="description" itemprop="description" content="Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the **vazul** package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration. &#10;The package allows researchers to maintain analytic flexibility while safeguarding against bias. By using **vazul**, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs."/>
+
+  <link rel="license" href="https://creativecommons.org/licenses/by/4.0/"/>
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2026-02-09"/>
+  <meta property="article:created" itemprop="dateCreated" content="2026-02-09"/>
+  <meta name="article:author" content="Tamás Nagy"/>
+  <meta name="article:author" content="Márton Kovács"/>
+  <meta name="article:author" content="Alexandra Sarafoglou"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="vazul: An R Package for Analysis Blinding"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the **vazul** package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration. &#10;The package allows researchers to maintain analytic flexibility while safeguarding against bias. By using **vazul**, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs."/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="vazul: An R Package for Analysis Blinding"/>
+  <meta property="twitter:description" content="Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the **vazul** package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration. &#10;The package allows researchers to maintain analytic flexibility while safeguarding against bias. By using **vazul**, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs."/>
+
+  <!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+  <meta name="citation_title" content="vazul: An R Package for Analysis Blinding"/>
+  <meta name="citation_pdf_url" content="manuscript.pdf"/>
+  <meta name="citation_journal_title" content="The R Journal"/>
+  <meta name="citation_issn" content="2073-4859"/>
+  <meta name="citation_firstpage" content="1"/>
+  <meta name="citation_fulltext_world_readable" content=""/>
+  <meta name="citation_online_date" content="2026/02/09"/>
+  <meta name="citation_publication_date" content="2026/02/09"/>
+  <meta name="citation_author" content="Tamás Nagy"/>
+  <meta name="citation_author_institution" content="ELTE Eötvös Loránd University"/>
+  <meta name="citation_author" content="Márton Kovács"/>
+  <meta name="citation_author_institution" content="Independent researcher"/>
+  <meta name="citation_author" content="Alexandra Sarafoglou"/>
+  <meta name="citation_author_institution" content="University of Amsterdam"/>
+  <!--/radix_placeholder_meta_tags-->
+  
+  <meta name="citation_reference" content="citation_title=A many-analysts approach to the relation between religiosity and well-being: Reflection and conclusion;citation_volume=13;citation_doi=10.1080/2153599X.2022.2070263;citation_author=Suzanne Hoogeveen;citation_author=Alexandra Sarafoglou;citation_author=Michiel Elk;citation_author=Eric-Jan Wagenmakers"/>
+  <meta name="citation_reference" content="citation_title=1,500 scientists lift the lid on reproducibility;citation_volume=533;citation_doi=10.1038/533452a;citation_author=Monya Baker"/>
+  <meta name="citation_reference" content="citation_title=The statistical crisis in science;citation_publisher=Princeton University Press;citation_volume=102;citation_author=Andrew Gelman;citation_author=Eric Loken"/>
+  <meta name="citation_reference" content="citation_title=Why most published research findings are false;citation_publisher=Public Library of Science;citation_volume=2;citation_doi=10.1371/journal.pmed.1004085;citation_author=John PA Ioannidis"/>
+  <meta name="citation_reference" content="citation_title=“Statistical significance” and statistical reporting: Moving beyond binary;citation_publisher=SAGE Publications Sage CA: Los Angeles, CA;citation_doi=10.1177/00222429231216910;citation_author=Blakeley B McShane;citation_author=Eric T Bradlow;citation_author=John G Lynch Jr;citation_author=Robert J Meyer"/>
+  <meta name="citation_reference" content="citation_title=Responding to reviewers and editors about statistical significance testing;citation_publisher=American College of Physicians;citation_volume=177;citation_doi=10.7326/M23-2430;citation_author=David A Savitz;citation_author=Lauren A Wise;citation_author=Julia C Bond;citation_author=Elizabeth E Hatch;citation_author=Collette N Ncube;citation_author=Amelia K Wesselink;citation_author=Mary D Willis;citation_author=Jennifer J Yland;citation_author=Kenneth J Rothman"/>
+  <meta name="citation_reference" content="citation_title=How best to quantify replication success? A simulation study on the comparison of replication success metrics;citation_publisher=The Royal Society;citation_volume=8;citation_doi=10.1098/rsos.201697;citation_author=Jasmine Muradchanian;citation_author=Rink Hoekstra;citation_author=Henk Kiers;citation_author=Don Ravenzwaaij"/>
+  <meta name="citation_reference" content="citation_title=Comment on “estimating the reproducibility of psychological science”;citation_volume=351;citation_doi=10.1126/science.aad7243;citation_author=Daniel T. Gilbert;citation_author=Gary King;citation_author=Stephen Pettigrew;citation_author=Timothy D. Wilson"/>
+  <meta name="citation_reference" content="citation_title=Evaluating replicability of laboratory experiments in economics;citation_publisher=American Association for the Advancement of Science;citation_volume=351;citation_doi=10.1126/science.aaf0918;citation_author=Colin F Camerer;citation_author=Anna Dreber;citation_author=Eskil Forsell;citation_author=Teck-Hua Ho;citation_author=Jürgen Huber;citation_author=Magnus Johannesson;citation_author=Michael Kirchler;citation_author=Johan Almenberg;citation_author=Adam Altmejd;citation_author=Taizan Chan;citation_author=Evaluating replicability of laboratory experiments in economics"/>
+  <meta name="citation_reference" content="citation_title=Editors’ introduction to the special section on replicability in psychological science: A crisis of confidence?;citation_publisher=Sage Publications Sage CA: Los Angeles, CA;citation_volume=7;citation_doi=10.1177/1745691612465253;citation_author=Harold Pashler;citation_author=Eric-Jan Wagenmakers"/>
+  <meta name="citation_reference" content="citation_title=Replicability, robustness, and reproducibility in psychological science;citation_publisher=Annual Reviews;citation_volume=73;citation_doi=10.1146/annurev-psych-020821-114157;citation_author=Brian A Nosek;citation_author=Tom E Hardwicke;citation_author=Hannah Moshontz;citation_author=Aurélien Allard;citation_author=Katherine S Corker;citation_author=Anna Dreber;citation_author=Fiona Fidler;citation_author=Joe Hilgard;citation_author=Melissa Kline Struhl;citation_author=Michèle B Nuijten;citation_author=Replicability, robustness, and reproducibility in psychological science"/>
+  <meta name="citation_reference" content="citation_title=Threats of a replication crisis in empirical computer science;citation_publisher=ACM New York, NY, USA;citation_volume=63;citation_doi=10.1145/3360311;citation_author=Andy Cockburn;citation_author=Pierre Dragicevic;citation_author=Lonni Besançon;citation_author=Carl Gutwin"/>
+  <meta name="citation_reference" content="citation_title=Estimating the reproducibility of psychological science;citation_volume=349;citation_doi=10.1126/science.aac4716;citation_author=Estimating the reproducibility of psychological science"/>
+  <meta name="citation_reference" content="citation_title=Contradicted and initially stronger effects in highly cited clinical research;citation_publisher=American Medical Association;citation_volume=294;citation_doi=10.1001/jama.294.2.218;citation_author=John PA Ioannidis"/>
+  <meta name="citation_reference" content="citation_title=Blind analysis as a correction for confirmatory bias in physics and in psychology;citation_publisher=John Wiley; Sons;citation_doi=10.1002/9781119095910.ch15;citation_author=R. MacCoun;citation_author=S. Perlmutter"/>
+  <meta name="citation_reference" content="citation_title=Blinding to remove biases in science and society;citation_publisher=MIT Press;citation_author=Robert MacCoun"/>
+  <meta name="citation_reference" content="citation_title=Blind analysis: Hide results to seek the truth;citation_volume=526;citation_doi=10.1038/526187a;citation_author=R. MacCoun;citation_author=S. Perlmutter"/>
+  <meta name="citation_reference" content="citation_title=Flexible yet fair: Blinding analyses in experimental psychology;citation_volume=198;citation_doi=10.1007/s11229-019-02456-7;citation_author=Gilles Dutilh;citation_author=A. Sarafoglou;citation_author=Eric-Jan Wagenmakers"/>
+  <meta name="citation_reference" content="citation_title=Comparing analysis blinding with preregistration in the Many-Analysts Religion Project;citation_publisher=SAGE Publications Sage CA: Los Angeles, CA;citation_volume=6;citation_doi=10.1177/25152459221128319;citation_author=Alexandra Sarafoglou;citation_author=Suzanne Hoogeveen;citation_author=Eric-Jan Wagenmakers"/>
+  <meta name="citation_reference" content="citation_title=Bestiary of Questionable Research Practices in psychology;citation_volume=8;citation_doi=10.1177/25152459251348431;citation_issn=2515-2459, 2515-2467;citation_author=Tamás Nagy;citation_author=Jane Hergert;citation_author=Mahmoud M. Elsherif;citation_author=Lukas Wallrich;citation_author=Kathleen Schmidt;citation_author=Tal Waltzer;citation_author=Jason W. Payne;citation_author=Biljana Gjoneska;citation_author=Yashvin Seetahul;citation_author=Y. Andre Wang;citation_author=Daniel Scharfenberg;citation_author=Gabriella Tyson;citation_author=Yu-Fang Yang;citation_author=Aleksandrina Skvortsova;citation_author=Samuel Alarie;citation_author=Katherine Graves;citation_author=Lukas K. Sotola;citation_author=David Moreau;citation_author=Eva Rubínová"/>
+  <meta name="citation_reference" content="citation_title=Specification curve analysis;citation_volume=4;citation_doi=10.1038/s41562-020-0912-z;citation_author=U. Simonsohn;citation_author=L. D. Nelson;citation_author=J. P. Simmons"/>
+  <meta name="citation_reference" content="citation_title=Increasing transparency through a multiverse analysis;citation_publisher=Sage Publications Sage CA: Los Angeles, CA;citation_volume=11;citation_doi=10.1177/1745691616658637;citation_author=Sara Steegen;citation_author=Francis Tuerlinckx;citation_author=Andrew Gelman;citation_author=Wolf Vanpaemel"/>
+  <meta name="citation_reference" content="citation_title=The garden of forking paths: Why multiple comparisons can be a problem, even when there is no &quot;fishing expedition&quot; or &quot;p-hacking&quot; and the research hypothesis was posited ahead of time;citation_volume=348;citation_author=Andrew Gelman;citation_author=Eric Loken"/>
+  <meta name="citation_reference" content="citation_title=HARKing: Hypothesizing after the results are known;citation_publisher=Sage Publications Sage CA: Los Angeles, CA;citation_volume=2;citation_doi=10.1207/s15327957pspr0203_4;citation_author=N. L. Kerr"/>
+  <meta name="citation_reference" content="citation_title=False–positive psychology: Undisclosed flexibility in data collection and analysis allows presenting anything as significant;citation_volume=22;citation_doi=10.1177/0956797611417632;citation_author=J. P. Simmons;citation_author=L. N Nelson;citation_author=U. Simonsohn"/>
+  <meta name="citation_reference" content="citation_title=The potential of preregistration in psychology: Assessing preregistration producibility and preregistration-study consistency;citation_doi=10.1037/met0000687;citation_issn=1939-1463, 1082-989X;citation_author=Olmo R. Van Den Akker;citation_author=Marjan Bakker;citation_author=Marcel A. L. M. Van Assen;citation_author=Charlotte R. Pennington;citation_author=Leone Verweij;citation_author=Mahmoud M. Elsherif;citation_author=Aline Claesen;citation_author=Stefan D. M. Gaillard;citation_author=Siu Kit Yeung;citation_author=Jan-Luca Frankenberger;citation_author=Kai Krautter;citation_author=Jamie P. Cockcroft;citation_author=Katharina S. Kreuer;citation_author=Thomas Rhys Evans;citation_author=Frédérique M. Heppel;citation_author=Sarah F. Schoch;citation_author=Max Korbmacher;citation_author=Yuki Yamada;citation_author=Nihan Albayrak-Aydemir;citation_author=Shilaan Alzahawi;citation_author=Alexandra Sarafoglou;citation_author=Maksim M. Sitnikov;citation_author=Filip Děchtěrenko;citation_author=Sophia Wingen;citation_author=Sandra Grinschgl;citation_author=Helena Hartmann;citation_author=Suzanne L. K. Stewart;citation_author=Cátia M. F. De Oliveira;citation_author=Sarah Ashcroft-Jones;citation_author=Bradley J. Baker;citation_author=Jelte M. Wicherts"/>
+  <meta name="citation_reference" content="citation_title=Reproducible research in R: A tutorial on how to do the same thing more than once;citation_publisher=MDPI;citation_volume=3;citation_doi=10.3390/psych3040053;citation_author=Aaron Peikert;citation_author=Caspar J Van Lissa;citation_author=Andreas M Brandmaier"/>
+  <meta name="citation_reference" content="citation_title=WORCS: A workflow for open reproducible code in science;citation_publisher=SAGE Publications Sage UK: London, England;citation_volume=4;citation_doi=10.3233/DS-210031;citation_author=Caspar J Van Lissa;citation_author=Andreas M Brandmaier;citation_author=Loek Brinkman;citation_author=Anna-Lena Lamprecht;citation_author=Aaron Peikert;citation_author=Marijn E Struiksma;citation_author=Barbara MI Vreede"/>
+  <meta name="citation_reference" content="citation_title=Blinding in randomised trials: Hiding who got what;citation_publisher=Elsevier;citation_volume=359;citation_author=Kenneth F Schulz;citation_author=David A Grimes"/>
+  <meta name="citation_reference" content="citation_title=A consensus-based transparency checklist;citation_volume=4;citation_doi=10.1038/s41562-019-0772-6;citation_author=B. Aczel;citation_author=B. Szaszi;citation_author=A. Sarafoglou;citation_author=Z. Kekecs;citation_author=Š Kucharský;citation_author=D. Benjamin;citation_author=C. D. Chambers;citation_author=A. Fisher;citation_author=A. Gelman;citation_author=M. A. Gernsbacher;citation_author=J. P. Ioannidis;citation_author=E. Johnson;citation_author=K. Jonas;citation_author=S. Kousta;citation_author=S. O. Lilienfeld;citation_author=D. S. Lindsay;citation_author=C. C. Morey;citation_author=M. Munafò;citation_author=B. R. Newell;citation_author=H. Pashler;citation_author=D. R. Shanks;citation_author=D. J. Simons;citation_author=J. M. Wicherts;citation_author=D. Albarracin;citation_author=N. D. Anderson;citation_author=J. Antonakis;citation_author=H. Arkes;citation_author=M. D. Back;citation_author=G. C. Banks;citation_author=C. Beevers;citation_author=A. A. Bennett;citation_author=W. Bleidorn;citation_author=T. W. Boyer;citation_author=C. Cacciari;citation_author=A. S. Carter;citation_author=J. Cesario;citation_author=C. Clifton;citation_author=R. M. Conroy;citation_author=M. Cortese;citation_author=F. Cosci;citation_author=N. Cowan;citation_author=J. Crawford;citation_author=E. A. Crone;citation_author=J. Curtin;citation_author=R. Engle;citation_author=S. Farrell;citation_author=P. Fearon;citation_author=M. Fichman;citation_author=W. Frankenhuis;citation_author=A. M. Freund;citation_author=M. G. Gaskell;citation_author=R. Giner–Sorolla;citation_author=D. P. Green;citation_author=R. L. Greene;citation_author=L. L. Harlow;citation_author=F. Hoces de la Guardia;citation_author=D. Isaacowitz;citation_author=J. Kolodner;citation_author=D. Lieberman;citation_author=G. D. Logan;citation_author=W. B. Mendes;citation_author=L. Moersdorf;citation_author=B. Nyhan;citation_author=J. Pollack;citation_author=C. Sullivan;citation_author=S. Vazire;citation_author=Eric-Jan Wagenmakers"/>
+  <meta name="citation_reference" content="citation_title=Safeguarding against bias without preregistration: A tutorial on analysis blinding for network analysis;citation_doi=10.31234/osf.io/gruw5\_v1;citation_author=Ria H A Hoekstra;citation_author=Karoline Huth;citation_author=Nikola Sekulovski;citation_author=Mia Delhalle;citation_author=Alexandra Sarafoglou"/>
+  <meta name="citation_reference" content="citation_title=Analysis blinding as a potential means to foster a productive collaboration between original authors and replicators;citation_publisher=University of California Press;citation_volume=11;citation_doi=10.1525/collabra.136869;citation_issn=2474-7394;citation_author=Alexandra Sarafoglou;citation_author=Suzanne Hoogeveen"/>
+  <meta name="citation_reference" content="citation_title=Comparing analysis blinding with preregistration in the many-analysts religion project;citation_publisher=SAGE Publications Inc;citation_volume=6;citation_doi=10.1177/25152459221128319;citation_issn=2515-2459;citation_author=Alexandra Sarafoglou;citation_author=Suzanne Hoogeveen;citation_author=Eric-Jan Wagenmakers"/>
+  <meta name="citation_reference" content="citation_title=Dplyr: A grammar of data manipulation;citation_author=Hadley Wickham;citation_author=Romain François;citation_author=Lionel Henry;citation_author=Kirill Müller;citation_author=Davis Vaughan"/>
+  <meta name="citation_reference" content="citation_title=JASP (Version 0.95.4)[Computer software];citation_author=JASP (Version 0.95.4)[Computer software]"/>
+  <meta name="citation_reference" content="citation_title=Reducing bias in secondary data analysis via an explore and confirm analysis workflow (ECAW): A proposal and survey of observational researchers;citation_publisher=The Royal Society;citation_volume=10;citation_doi=10.1098/rsos.230568;citation_issn=2054-5703;citation_author=Robert T Thibault;citation_author=Marton Kovacs;citation_author=Tom E Hardwicke;citation_author=Alexandra Sarafoglou;citation_author=John P A Ioannidis;citation_author=Marcus R Munafò"/>
+  <meta name="citation_reference" content="citation_title=When and how to deviate from a preregistration;citation_publisher=University of California Press;citation_volume=10;citation_doi=10.1525/collabra.117094;citation_issn=2474-7394;citation_author=Daniël Lakens"/>
+  <meta name="citation_reference" content="citation_title=Do open-science badges increase trust in scientists among undergraduates, scientists, and the public?;citation_publisher=SAGE Publications;citation_volume=33;citation_doi=10.1177/09567976221097499;citation_issn=0956-7976,1467-9280;citation_author=Jürgen Schneider;citation_author=Tom Rosman;citation_author=Augustin Kelava;citation_author=Samuel Merk"/>
+  <meta name="citation_reference" content="citation_title=Trusting on the shoulders of open giants? Open science increases trust in science for the public and academics;citation_publisher=Oxford University Press (OUP);citation_volume=72;citation_doi=10.1093/joc/jqac017;citation_issn=0021-9916,1460-2466;citation_author=Hyunjin Song;citation_author=David M Markowitz;citation_author=Samuel Hardman Taylor"/>
+  <meta name="citation_reference" content="citation_title=R: A language and environment for statistical computing;citation_publisher=R Foundation for Statistical Computing;citation_author=R: A language and environment for statistical computing"/>
+  <meta name="citation_reference" content="citation_title=Vazul: An R package for analysis blinding;citation_publisher=Zenodo;citation_doi=10.5281/ZENODO.18269712;citation_author=Tamás Nagy;citation_author=Márton Kovács;citation_author=Alexandra Sarafoglou"/>
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","bibliography","output","editor_options","journal","slug","pdf_url","creative_commons","date","packages","CTV","csl"]}},"value":[{"type":"character","attributes":{},"value":["vazul: An R Package for Analysis Blinding"]},{"type":"character","attributes":{},"value":["Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the **vazul** package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration. \nThe package allows researchers to maintain analytic flexibility while safeguarding against bias. By using **vazul**, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","address","orcid_id","email"]}},"value":[{"type":"character","attributes":{},"value":["Tamás Nagy"]},{"type":"character","attributes":{},"value":["ELTE Eötvös Loránd University"]},{"type":"character","attributes":{},"value":["Institute of Psychology, ELTE Eötvös Loránd University","Budapest, Hungary"]},{"type":"character","attributes":{},"value":["0000-0001-5244-0356"]},{"type":"character","attributes":{},"value":["nagy.tamas@ppk.elte.hu"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","address","orcid_id","email"]}},"value":[{"type":"character","attributes":{},"value":["Márton Kovács"]},{"type":"character","attributes":{},"value":["Independent researcher"]},{"type":"character","attributes":{},"value":["Budapest, Hungary"]},{"type":"character","attributes":{},"value":["0000-0002-8142-8492"]},{"type":"character","attributes":{},"value":["marton.balazs.kovacs@gmail.com"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","address","orcid_id","email"]}},"value":[{"type":"character","attributes":{},"value":["Alexandra Sarafoglou"]},{"type":"character","attributes":{},"value":["University of Amsterdam"]},{"type":"character","attributes":{},"value":["Department of Psychology, University of Amsterdam","Amsterdam, The Netherlands"]},{"type":"character","attributes":{},"value":["0000-0003-0031-685X"]},{"type":"character","attributes":{},"value":["a.s.g.sarafoglou@uva.nl"]}]}]},{"type":"character","attributes":{},"value":["bibliography.bib"]},{"type":"character","attributes":{},"value":["rjtools::rjournal_article"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["inline"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","issn","firstpage","lastpage"]}},"value":[{"type":"character","attributes":{},"value":["The R Journal"]},{"type":"character","attributes":{},"value":["2073-4859"]},{"type":"double","attributes":{},"value":[1]},{"type":"NULL"}]},{"type":"character","attributes":{},"value":["manuscript"]},{"type":"character","attributes":{},"value":["manuscript.pdf"]},{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["2026-02-09"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["cran","bioc"]}},"value":[{"type":"list","attributes":{},"value":[]},{"type":"list","attributes":{},"value":[]}]},{"type":"list","attributes":{},"value":[]},{"type":"character","attributes":{},"value":["C:/Users/t/AppData/Local/R/win-library/4.5/rjtools/rjournal.csl"]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["bibliography.bib","manuscript.log","manuscript.pdf","manuscript.tex","RJournal.sty","RJwrapper.log","RJwrapper.tex"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+    font-size: 100%;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  hr.section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0px;
+  }
+
+
+  d-byline {
+    border-top: none;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+    border-top: none;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  /* tweak for Pandoc numbered line within distill */
+  d-article pre.numberSource code > span {
+      left: -2em;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // separator
+    var separator = '<hr class="section-separator" style="clear: both"/>';
+    // prepend separator above appendix
+    $('.d-byline').before(separator);
+    $('.d-article').before(separator);
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme, except when numbering line
+    // in code chunk
+    $('pre:not(.numberLines) code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        var author_name = front_matter.authors[i].author
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', author_name ? 'ORCID ID for ' + author_name : 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
+        }).join("\n");
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="manuscript_files/header-attrs-2.30/header-attrs.js"></script>
+  <script src="manuscript_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="manuscript_files/popper-2.6.0/popper.min.js"></script>
+  <link href="manuscript_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="manuscript_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="manuscript_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="manuscript_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="manuscript_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="manuscript_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="manuscript_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+  <script>
+    $(function() {
+      console.log("Starting...")
+
+      // Mathjax config (add automatic linebreaks when supported)
+      // MathJax = {
+      //    tex: {
+      //        inlineMath: [['$', '$'], ['\\(', '\\)']],
+      //        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      //        tags: 'ams',
+      //        multline: true,
+      //    },
+      //    options: {
+      //        linebreaks: { automatic: true },
+      //    },
+      // };
+
+      // Always show Published - distill hides it if not set
+      function show_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'visible');
+      }
+
+      show_byline_column('Published')
+
+      // tweak function
+      var rmd_meta = JSON.parse($("#radix-rmarkdown-metadata").html());
+      function get_meta(name, meta) {
+        var ind = meta.attributes.names.value.findIndex((e) => e == name)
+        var val = meta.value[ind]
+        if (val.type != 'list') {
+          return val.value.toString()
+        }
+        return val
+      }
+
+      // tweak description
+      // Add clickable tags
+      const slug = get_meta('slug', rmd_meta)
+      const cite_url = get_meta('citation_url', rmd_meta)
+
+      var title = $("d-title").text
+
+      const buttons = $('<div class="dt-tags" style="grid-column: page;">')
+      buttons.append('<a href="#citation" class="dt-tag"><i class="fas fa-quote-left"></i> Cite</a>')
+      buttons.append('<a href="' + slug + '.pdf" class="dt-tag"><i class="fas fa-file-pdf"></i> PDF</a>')
+      buttons.append('<a href="' + slug + '.zip" class="dt-tag"><i class="fas fa-file-zipper"></i> Supplement</a>')
+
+      // adds Abstract: in front of the first <p> in the title section --
+      // unless it happens to be the subtitle (FIXME: this is a bad hack - can't distill do this?)
+      var tpar = $("d-title p:not(:empty)").filter(function() {
+        return !$(this).hasClass("subtitle");
+      }).first();
+      if (tpar) {
+        const abstract = $('<d-abstract>')
+        abstract.append('<b>Abstract:</b><br>')
+        abstract.append(tpar) // Move description to d-abstract
+        $("d-title p:empty").remove() // Remove empty paragraphs after title
+        abstract.append(buttons)
+        abstract.insertAfter($('d-title')) // Add abstract section after title */
+      }
+
+      // tweak by-line
+      var byline = $("d-byline div.byline")
+      ind = rmd_meta.attributes.names.value.findIndex((e) => e == "journal")
+      const journal = get_meta('journal', rmd_meta)
+      const volume = get_meta('volume', rmd_meta)
+      const issue = get_meta('issue', rmd_meta)
+      const jrtitle = get_meta('title', journal)
+      const year = ((jrtitle == "R News") ? 2000 : 2008) + parseInt(volume)
+      const firstpage = get_meta('firstpage', journal)
+      const lastpage = get_meta('lastpage', journal)
+      byline.append('<div class="rjournal grid">')
+      $('div.rjournal').append('<h3>Volume</h3>')
+      $('div.rjournal').append('<h3>Pages</h3>')
+      $('div.rjournal').append('<a class="volume" href="../../issues/'+year+'-'+issue+'">'+volume+'/'+issue+'</a>')
+      $('div.rjournal').append('<p class="pages">'+firstpage+' - '+lastpage+'</p>')
+
+      const received_date = new Date(get_meta('date_received', rmd_meta))
+      byline.find('h3:contains("Published")').parent().append('<h3>Received</h3><p>'+received_date.toLocaleDateString('en-US', {month: 'short'})+' '+received_date.getDate()+', '+received_date.getFullYear()+'</p>')
+
+    })
+  </script>
+
+  <style>
+      /*
+    .nav-dropdown-content .nav-dropdown-header {
+      text-transform: lowercase;
+    }
+    */
+
+    d-byline .byline {
+      grid-template-columns: 2fr 2fr 2fr 2fr;
+    }
+
+    d-byline .rjournal {
+      grid-column-end: span 2;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 0;
+    }
+
+    d-title h1, d-title p, d-title figure,
+    d-abstract p, d-abstract b {
+      grid-column: page;
+    }
+
+    d-title .dt-tags {
+      grid-column: page;
+    }
+
+    .dt-tags .dt-tag {
+      text-transform: lowercase;
+    }
+
+    d-article h1 {
+      line-height: 1.1em;
+    }
+
+    d-abstract p, d-article p {
+      text-align: justify;
+    }
+
+    @media(min-width: 1000px) {
+      .d-contents.d-contents-float {
+        justify-self: end;
+      }
+
+      nav.toc {
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-right-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .posts-list .dt-tags .dt-tag {
+      text-transform: lowercase;
+    }
+
+    @keyframes highlight-target {
+      0% {
+        background-color: #ffa;
+      }
+      66% {
+        background-color: #ffa;
+      }
+      100% {
+        background-color: none;
+      }
+    }
+
+    d-article :target, d-appendix :target {
+       animation: highlight-target 3s;
+    }
+
+    .header-section-number {
+      margin-right: 0.5em;
+    }
+    
+    d-appendix .citation-appendix,
+    .d-appendix .citation-appendix {
+      color: rgb(60, 60, 60);
+    }
+
+    d-article h2 {
+      border-bottom: 0px solid rgba(0, 0, 0, 0.1);
+      padding-bottom: 0rem;
+    }
+    d-article h3 {
+      font-size: 20px;
+    }
+    d-article h4 {
+      font-size: 18px;
+      text-transform: none;
+    }
+
+    @media (min-width: 1024px) {
+      d-article h2 {
+        font-size: 32px;
+      }
+      d-article h3 {
+        font-size: 24px;
+      }
+      d-article h4 {
+        font-size: 20px;
+      }
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"vazul: An R Package for Analysis Blinding","description":"Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the **vazul** package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration. \nThe package allows researchers to maintain analytic flexibility while safeguarding against bias. By using **vazul**, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs.","authors":[{"author":"Tamás Nagy","authorURL":"#","affiliation":"ELTE Eötvös Loránd University","affiliationURL":"#","orcidID":"0000-0001-5244-0356"},{"author":"Márton Kovács","authorURL":"#","affiliation":"Independent researcher","affiliationURL":"#","orcidID":"0000-0002-8142-8492"},{"author":"Alexandra Sarafoglou","authorURL":"#","affiliation":"University of Amsterdam","affiliationURL":"#","orcidID":"0000-0003-0031-685X"}],"publishedDate":"2026-02-09T00:00:00.000+01:00","citationText":"Nagy, et al., 2026"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>vazul: An R Package for Analysis Blinding</h1>
+
+<!--radix_placeholder_categories-->
+<!--/radix_placeholder_categories-->
+<p><p>Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the <strong>vazul</strong> package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration.
+The package allows researchers to maintain analytic flexibility while safeguarding against bias. By using <strong>vazul</strong>, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs.</p></p>
+</div>
+
+<div class="d-byline">
+  Tamás Nagy  (ELTE Eötvös Loránd University)
+  
+,   Márton Kovács  (Independent researcher)
+  
+,   Alexandra Sarafoglou  (University of Amsterdam)
+  
+<br/>2026-02-09
+</div>
+
+<div class="d-article">
+<h2 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>In data analysis, researchers face the challenge of maintaining objectivity and minimizing bias. A central concern is the considerable analytic flexibility present at various stages of the workflow, including data preprocessing, variable selection, model specification, and statistical testing. This flexibility has been described as the “garden of forking paths” <span class="citation" data-cites="gelman2013garden">(<a href="#ref-gelman2013garden" role="doc-biblioref">Gelman and Loken 2013</a>)</span>, meaning that possibly hundreds or thousands of plausible, non-redundant analytic strategies can be applied to the same dataset <span class="citation" data-cites="steegen2016increasing SimonsohnEtAl2020">(<a href="#ref-steegen2016increasing" role="doc-biblioref">Steegen et al. 2016</a>; <a href="#ref-SimonsohnEtAl2020" role="doc-biblioref">Simonsohn et al. 2020</a>)</span>. Crucially, different analytic paths can yield different results, and analysts may, intentionally or not, gravitate toward those that align with their expectations.</p>
+<p>The result can be biased or even spurious findings <span class="citation" data-cites="ioannidis2005most simmons2011false gelman2016statistical">(<a href="#ref-ioannidis2005most" role="doc-biblioref">Ioannidis 2005b</a>; <a href="#ref-simmons2011false" role="doc-biblioref">Simmons et al. 2011</a>; <a href="#ref-gelman2016statistical" role="doc-biblioref">Gelman and Loken 2016</a>)</span>, which have eroded trust in science and contributed to replication failures across medical sciences, psychology, economics, and computer science <span class="citation" data-cites="ioannidis2005contradicted open2015estimating baker2016scientists nosek2022replicability pashler2012editors camerer2016evaluating cockburn2020threats">(<a href="#ref-ioannidis2005contradicted" role="doc-biblioref">Ioannidis 2005a</a>; <a href="#ref-pashler2012editors" role="doc-biblioref">Pashler and Wagenmakers 2012</a>; <a href="#ref-open2015estimating" role="doc-biblioref">Open Science Collaboration 2015</a>; <a href="#ref-baker2016scientists" role="doc-biblioref">Baker 2016</a>; <a href="#ref-camerer2016evaluating" role="doc-biblioref">Camerer et al. 2016</a>; <a href="#ref-cockburn2020threats" role="doc-biblioref">Cockburn et al. 2020</a>; <a href="#ref-nosek2022replicability" role="doc-biblioref">Nosek et al. 2022</a>)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To ensure the reliability of empirical findings, it is therefore essential to prevent the idiosyncrasies of the data from feeding back into the formulation of the hypotheses being tested <span class="citation" data-cites="kerr1998harking">(HARKing, <a href="#ref-kerr1998harking" role="doc-biblioref">Kerr 1998</a>)</span> or from prompting researchers to exploit their analytic freedom to accentuate desired outcomes <span class="citation" data-cites="simmons2011false">(<a href="#ref-simmons2011false" role="doc-biblioref">Simmons et al. 2011</a>)</span>. In response, researchers have proposed methodologies to limit the influence of bias in data analysis. One such method is analysis blinding, which supplies analysts with an altered version of the real data that conceals biasing features until the analysis plan is finalized.</p>
+<p>Analysis blinding, or blind analysis <span class="citation" data-cites="maccoun2015hide maccoun2018psychological">(<a href="#ref-maccoun2015hide" role="doc-biblioref">MacCoun and Perlmutter 2015</a>, <a href="#ref-maccoun2018psychological" role="doc-biblioref">2018</a>)</span>, is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts—for example, by scrambling dependent variables or masking condition labels. The procedure typically involves two independent parties: a data manager, who has full access to the raw data and is responsible for implementing the blinding steps, and an analyst, who is tasked with developing the analysis plan. After the data manager applies the blinding procedure, the analyst receives the resulting modified dataset: the blinded data.</p>
+<p>Working with the blinded data, the analyst can explore and preprocess the dataset and develop an analysis plan without being influenced by whether a particular analytic choice produces the desired result, as any patterns in the blinded data are, by design, only a product of chance. Importantly, although the test-relevant elements are concealed, other meaningful characteristics remain intact, including demographic information, secondary variables, and the distributional properties of both dependent and independent variables. As a result, the analyst retains all information necessary to tailor the analytic approach to the specific, and potentially unexpected, features of the data. Once the analysis plan has been finalized using the blinded data, the analyst is granted access to the raw, unblinded dataset, and the confirmatory analysis can then be carried out strictly according to the pre-established plan.</p>
+<p>Analysis blinding ties in with other methodologies to minimize bias in the research cycle, such as single-blind or double-blind experimental designs, where participants and/or experimenters are unaware of certain aspects of the study to prevent bias in data collection <span class="citation" data-cites="schulz2002blinding">(<a href="#ref-schulz2002blinding" role="doc-biblioref">Schulz and Grimes 2002</a>)</span>. Here, the analysts are intentionally kept unaware of certain aspects of the data to prevent bias in data analysis, which is why the methodology is also referred to as triple-blind <span class="citation" data-cites="schulz2002blinding">(<a href="#ref-schulz2002blinding" role="doc-biblioref">Schulz and Grimes 2002</a>)</span>.</p>
+<h3 data-number="1.1" id="the-two-stage-workflow"><span class="header-section-number">1.1</span> The Two-Stage Workflow</h3>
+<p>To maintain the integrity of the blinding process, researchers should adhere to a strict two-stage workflow.</p>
+<p><strong>Stage 1: Blinded analysis script development.</strong> In this stage, the data manager provides the analyst with a version of the data that has been blinded (e.g., processed using <strong>vazul</strong>). Crucially, the blinding transformation must be non-reversible. The analyst should not be able to reverse-engineer the masks or un-scramble the values to recover the original associations. All data cleaning, visualization, and model building are performed on this blinded set.</p>
+<p><strong>Stage 2: Unblinding and execution.</strong> Once the analysis code is finalized and locked (e.g., by committing it to a repository or uploading it to a preregistration platform), the second stage begins. During unblinding, the analyst does not modify the code to accommodate the real data. Instead, they apply the finalized analysis code to the original, unblinded dataset. This ensures that the results are the product of decisions made in total ignorance of the statistical inferences (e.g., p-values) or effect sizes.</p>
+<p>Although many blinding techniques are conceptually straightforward, such as scrambling outcome variables or masking variable names and factor labels, their practical implementation can become technically challenging once real research designs and data structures are considered. For instance, in hierarchical models, researchers may need to scramble the outcome variable to destroy the effect of interest while still preserving information within grouping levels, such as country-level means in cross-cultural datasets <span class="citation" data-cites="sarafoglou2023comparing">(e.g., <a href="#ref-sarafoglou2023comparing" role="doc-biblioref">Sarafoglou et al. 2023a</a>)</span>. Similarly, in repeated-measures designs, condition labels may need to be masked so that each participant’s condition structure is preserved while permuting the mapping of conditions across participants to obscure the true experimental effect. These complexities make manual analysis blinding difficult to carry out consistently and correctly. To lower barriers for data managers and facilitate the broader adoption of analysis blinding in research labs, dedicated software tools, such as <strong>R</strong> packages, are needed to implement these procedures reliably.</p>
+<p>To meet this need, the <strong>vazul</strong><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> package <span class="citation" data-cites="Nagy2026-gb">(<a href="#ref-Nagy2026-gb" role="doc-biblioref">Nagy et al. 2026</a>)</span> in <strong>R</strong> <span class="citation" data-cites="R2025">(<a href="#ref-R2025" role="doc-biblioref">R Core Team 2025</a>)</span> offers flexible and reproducible tools for implementing analysis blinding. The <strong>R</strong> package provides functionality for data scrambling as well as data and variable masking. In the remainder of this article, we introduce the methodology in more detail, describe the functionalities of the <strong>vazul</strong> package, and illustrate its application through practical examples. We conclude with a brief discussion and outline future directions.</p>
+<h3 data-number="1.2" id="analysis-blinding-safeguarding-against-bias-without-preregistration"><span class="header-section-number">1.2</span> Analysis Blinding: Safeguarding Against Bias Without Preregistration</h3>
+<p>Originally, analysis blinding gained traction in astrophysics in the early 2000s <span class="citation" data-cites="maccoun2018psychological">(<a href="#ref-maccoun2018psychological" role="doc-biblioref">MacCoun and Perlmutter 2018</a>)</span> as a means of safeguarding analysts against bias. Since then, the methodology has also been advocated in the social and behavioral sciences as an alternative or complement to preregistration <span class="citation" data-cites="dutilh2021blinding nagy2025bestiary maccoun2021removebiases maccoun2015hide maccoun2018psychological aczel2020transparency">(<a href="#ref-maccoun2015hide" role="doc-biblioref">MacCoun and Perlmutter 2015</a>, <a href="#ref-maccoun2018psychological" role="doc-biblioref">2018</a>; <a href="#ref-dutilh2021blinding" role="doc-biblioref">Dutilh et al. 2019</a>; <a href="#ref-aczel2020transparency" role="doc-biblioref">Aczel et al. 2020</a>; <a href="#ref-maccoun2021removebiases" role="doc-biblioref">MacCoun 2021</a>; <a href="#ref-nagy2025bestiary" role="doc-biblioref">Nagy et al. 2025</a>)</span>.</p>
+<p>This interest partly reflects the fact that analysis blinding addresses practical limitations of preregistration when analytic flexibility is required. While preregistration provides a valuable framework for increasing transparency, analysts may nonetheless encounter unexpected features of the data that necessitate deviations from the preregistered plan. Such deviations are common and often unavoidable, and when transparently reported and justified, they can enhance the credibility and validity of research findings <span class="citation" data-cites="vandenakker2024potential Lakens2024-tj Schneider2022-oq Song2022-em">(<a href="#ref-Song2022-em" role="doc-biblioref">Song et al. 2022</a>; <a href="#ref-Schneider2022-oq" role="doc-biblioref">Schneider et al. 2022</a>; <a href="#ref-Lakens2024-tj" role="doc-biblioref">Lakens 2024</a>; e.g., <a href="#ref-vandenakker2024potential" role="doc-biblioref">Van Den Akker et al. 2024</a>)</span>.</p>
+<p>At the same time, preregistration offers limited guidance on how analytic decisions should be adapted in response to unforeseen data characteristics, and how such deviations should be interpreted with respect to confirmatory status. As a result, researchers may face a tension between adhering strictly to a preregistered plan and making principled, data-informed adjustments. Analysis blinding alleviates this tension by allowing analysts to flexibly develop and refine analysis plans using blinded data, before any test-relevant information is revealed.</p>
+<p>In contrast to preregistration, analysis blinding allows researchers to maintain flexibility in their analysis plans, as they can explore the data without being constrained by a rigid preregistered protocol. This flexibility is especially important in analyses involving advanced statistical modeling or preprocessing, where not all decisions can be anticipated in advance and researchers must make data-dependent choices. For instance, many psychological constructs, such as well-being, are measured with multi-item scales whose factor structure must be examined before further analysis; whether the items load onto a single factor or multiple factors determines subsequent analytic steps, including whether composite scores can be computed or whether a more complex measurement model is required <span class="citation" data-cites="MARP2022discussion">(see e.g., <a href="#ref-MARP2022discussion" role="doc-biblioref">Hoogeveen et al. 2023</a>)</span>. The flexibility gained by analysis blinding enables researchers to develop analysis strategies that are appropriately tailored to the specific characteristics of the dataset without the need to anticipate and specify all eventualities in advance. Consequently, researchers who analyze their data with analysis blinding are less likely to deviate from their developed analysis plan compared to researchers who preregister their analytic strategy in a text-based format <span class="citation" data-cites="sarafoglou2023comparing">(<a href="#ref-sarafoglou2023comparing" role="doc-biblioref">Sarafoglou et al. 2023a</a>)</span>.</p>
+<p>Moreover, similar in spirit to approaches proposed in code-based preregistration <span class="citation" data-cites="peikert2021reproducible vanlissa2021worcs">(<a href="#ref-peikert2021reproducible" role="doc-biblioref">Peikert et al. 2021</a>; <a href="#ref-vanlissa2021worcs" role="doc-biblioref">Van Lissa et al. 2021</a>)</span>, analysis blinding naturally produces analysis plans that are specific, precise, and exhaustive, because they are written directly in code rather than described verbally in preregistration templates. As with preregistration, analysis scripts based on the blinded data can be uploaded or attached to preregistration platforms (e.g., the Open Science Framework) to provide a transparent record of the planned analysis before the data are unblinded. In short, analysis blinding can serve as a valuable alternative or additional safeguard to preregistered analysis plans: it effectively protects against bias while providing analysts with the flexibility needed to develop an analysis strategy that is optimally suited to their data. Notably, even when the blinding code itself is shared, the original data cannot be recovered from the blinded dataset without access to the raw data, making analysis blinding compatible with transparent and open workflows.</p>
+<p>Analysis blinding can be particularly valuable for secondary data analysis, where the confirmatory power of preregistration is often compromised by prior exposure to the data <span class="citation" data-cites="Thibault2023-of">(<a href="#ref-Thibault2023-of" role="doc-biblioref">Thibault et al. 2023</a>)</span>. In archival datasets, large-scale surveys, or shared repositories, researchers may already possess unavoidable knowledge of variable distributions or previously reported associations. By developing and finalizing analysis plans on a blinded version of the existing data, researchers can maintain analytic flexibility while providing a verifiable safeguard against post-hoc bias. This approach effectively protects the confirmatory status of the study in contexts where traditional preregistration might otherwise be perceived as impractical or insufficient.</p>
+<h2 data-number="2" id="overview-of-the-main-functions"><span class="header-section-number">2</span> Overview of the main functions</h2>
+<p>The package provides functions for two main types of analysis blinding:</p>
+<ol type="1">
+<li><strong>Masking</strong>: Replaces original values with anonymous labels, completely hiding the original information.</li>
+<li><strong>Scrambling</strong>: Randomizes the order of existing values while preserving all original data content.</li>
+</ol>
+<h3 data-number="2.1" id="choosing-between-masking-and-scrambling"><span class="header-section-number">2.1</span> Choosing between masking and scrambling</h3>
+<p>When choosing between masking and scrambling for analysis blinding, the decision usually turns on what information must be concealed and what structure must be preserved to allow for the development of a suitable analysis pipeline. Masking is most appropriate when the risk lies in the labels of categories rather than their relationships. By replacing group names (e.g., ‘Treatment’ and ‘Control’) with arbitrary codes (e.g., ‘Group A’ and ‘Group B’), the group allocation is preserved. This allows analysts to perform group-level operations—such as ANOVA or regression—while remaining blinded to the substantive identity of those groups. Note, that since group-level distinctions remain intact, masking is best suited for workflows where knowing the direction of a difference would not inadvertently reveal the underlying category meaning. Masking also accommodates cases where different variables require different relabeling schemes or prefixes, for example when several independent categorical factors need to remain distinguishable but substantively opaque. This approach is common in clinical trials, behavioral experiments, and preregistered confirmatory analyses where preserving the structure of factors is essential but knowledge of factor identity would bias analytic choices. For instance, an analyst can check for data consistency across four masked study sites (e.g., “Site A” through “Site D”) to ensure uniform data quality without knowing the specific geographic locations. This preserves the site-level grouping for variance testing while preventing biased assumptions about data from specific regions.</p>
+<p>Masking can be indispensable in situations where the variable names themselves carry substantive meaning. This occurs, for example, in network analysis, where variables become nodes with interpretable labels, or in factor-analytic work, where item names often hint at their latent content <span class="citation" data-cites="Hoekstra2025-ub">(<a href="#ref-Hoekstra2025-ub" role="doc-biblioref">Hoekstra et al. 2025</a>)</span>. In such settings, simply scrambling values would not prevent analysts from inferring the underlying constructs, whereas masking removes this semantic cue entirely. The <strong>vazul</strong> package supports this use case directly by offering functionality for masking variable names alongside their values.</p>
+<p>Scrambling becomes the better choice when the goal is to preserve the marginal distributions of numeric variables while severing their hypothesized associations. It is particularly useful in settings where analysts need access to realistic distributions—variance, skew—to make decisions about transformations, model families, or robustness checks, yet must remain blind to the relationship between predictors and outcomes. By permuting values within variables, scrambling prevents recognition of treatment or experimental effects, correlations, or temporal patterns, making it harder to inadvertently tune an analysis toward the desired result. It is often the preferred option in longitudinal studies, high-dimensional observational datasets where categorical relabeling would either destroy important numeric structure or be easy to reverse-engineer (e.g., in case of three experimental conditions, the researcher may guess which one is which based on the means). Scrambling is generally the more versatile option, because it can be applied across variable types and adapts well to a wide range of study designs and analytic workflows. Its ability to break associations while preserving distributions makes it suitable for almost everything from tightly controlled experiments to complex observational datasets, including high-dimensional or mixed-format data <span class="citation" data-cites="Sarafoglou2025-fr Sarafoglou2023-rf">(<a href="#ref-Sarafoglou2023-rf" role="doc-biblioref">Sarafoglou et al. 2023b</a>; <a href="#ref-Sarafoglou2025-fr" role="doc-biblioref">Sarafoglou and Hoogeveen 2025</a>)</span>.</p>
+<table>
+<caption>Comparison of masking and scrambling approaches for analysis blinding.</caption>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 44%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Aspect</strong></th>
+<th><strong>Masking</strong></th>
+<th><strong>Scrambling</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Original values</td>
+<td>Replaced with arbitrary codes</td>
+<td>Preserved but permuted</td>
+</tr>
+<tr class="even">
+<td>Data distribution</td>
+<td>Category counts preserved with different labels</td>
+<td>Marginal distributions fully preserved</td>
+</tr>
+<tr class="odd">
+<td>Associations with blinded variables</td>
+<td>Preserved</td>
+<td>Broken (correlations, treatment–outcome links removed)</td>
+</tr>
+<tr class="even">
+<td>Risk addressed</td>
+<td>Hiding the identity or meaning of categories or variable names</td>
+<td>Preventing recognition of true relationships or effects</td>
+</tr>
+<tr class="odd">
+<td>Best suited for</td>
+<td>Categorical variables with many different labels; variables whose names convey substantive meaning</td>
+<td>Numeric or categorical variables; mixed-type data</td>
+</tr>
+<tr class="even">
+<td>Typical use cases</td>
+<td>Clinical trials, behavioral experiments, network analysis, factor analysis</td>
+<td>Longitudinal data, observational datasets, robustness checks</td>
+</tr>
+<tr class="odd">
+<td>When essential</td>
+<td>When variable names or category labels carry substantive information</td>
+<td>When analysts need realistic numeric structure but must remain blind to associations</td>
+</tr>
+<tr class="even">
+<td>Flexibility across research settings</td>
+<td>Limited by categorical/semantic constraints</td>
+<td>Broadly applicable to most data types and study designs</td>
+</tr>
+</tbody>
+</table>
+<p>In the <strong>vazul</strong> package, each approach is available at three levels:</p>
+<ul>
+<li><strong>Vector level</strong>: <code>mask_labels()</code> and <code>scramble_values()</code> - operate on single vectors</li>
+<li><strong>Data frame level</strong>: <code>mask_variables()</code> and <code>scramble_variables()</code> - operate on columns in a data frame</li>
+<li><strong>Row-wise level</strong>: <code>scramble_variables(..., .byrow = TRUE)</code> - operates within rows across columns.</li>
+</ul>
+<p>The design of these three levels reflects the common ways researchers interact with data in <strong>R</strong>. Vector-level functions are the primary building blocks, designed for simple pipelines where a researcher might want to blind a single outcome or a specific grouping factor. These functions are particularly useful when working with <strong>dplyr</strong>’s <code>mutate()</code> or within custom functions where a specific variable needs to be isolated and transformed without affecting the rest of the environment <span class="citation" data-cites="Wickham2025-eh">(<a href="#ref-Wickham2025-eh" role="doc-biblioref">Wickham et al. 2025</a>)</span>. By providing these atomic operations, <strong>vazul</strong> ensures that the core blinding logic remains accessible even for non-standard data structures.</p>
+<p>Moving to the data frame and row-wise levels, the package addresses more complex research designs. Data frame-level functions allow for bulk operations, which are essential for datasets with dozens of variables requiring consistent masking or independent scrambling. The row-wise operations solve a frequent headache in repeated-measures and longitudinal research. In these designs, the “unit” of analysis is often spread across multiple columns (e.g., independent varibles in factorial designs); the row-wise functions ensure that the relationship within a participant’s data is handled correctly—either by scrambling values across those specific time points for each person or by applying a consistent mask that hides the identity of the measurement while preserving the participant-level structure. It is important to note that while <strong>vazul</strong> supports row-wise scrambling, it does not provide a row-wise masking function. Masking across different variables within a single observation lacks a clear methodological justification in analysis blinding, as masking is intended to obscure values while preserving their distributional properties (see later for alternative solutions).</p>
+<p>All of the functions require a data frame or vector as input and return a modified version with masked or scrambled values. The original data structure, including class attributes and metadata, is carefully preserved to ensure that the blinded data can be passed directly into existing analysis scripts or visualization packages without requiring additional type conversions.</p>
+<table>
+<caption>Overview of <strong>vazul</strong> functions for masking and scrambling data</caption>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 26%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Level</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>mask_labels()</code></td>
+<td>Vector</td>
+<td>Replace categorical values with anonymous labels</td>
+</tr>
+<tr class="even">
+<td><code>mask_variables()</code></td>
+<td>Data frame</td>
+<td>Mask multiple columns</td>
+</tr>
+<tr class="odd">
+<td><code>mask_names()</code></td>
+<td>Variable names</td>
+<td>Mask column names</td>
+</tr>
+<tr class="even">
+<td><code>scramble_values()</code></td>
+<td>Vector</td>
+<td>Randomize value order</td>
+</tr>
+<tr class="odd">
+<td><code>scramble_variables()</code></td>
+<td>Data frame</td>
+<td>Scramble multiple columns</td>
+</tr>
+<tr class="even">
+<td><code>scramble_variables(..., .byrow = TRUE)</code></td>
+<td>Row-wise</td>
+<td>Scramble values within rows</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>vazul</strong> package is open source and distributed via CRAN and GitHub (). All analyses reported here were conducted using version 1.1.0.</p>
+<p>In the following sections, we provide detailed descriptions and examples for each of these functions, illustrating their use cases and practical applications in research workflows. We starts with setting up the environment and loading the included datasets.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://nthun.github.io/vazul/'>vazul</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1037</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>marp</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>williams</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<h3 data-number="2.2" id="included-datasets"><span class="header-section-number">2.2</span> Included datasets</h3>
+<p>The <strong>vazul</strong> package includes two research datasets for demonstration and practice. The <code>marp</code> dataset contains cross-national survey data on religiosity <span class="citation" data-cites="MARP2022discussion">(<a href="#ref-MARP2022discussion" role="doc-biblioref">Hoogeveen et al. 2023</a>)</span>, while the <code>williams</code> dataset contains experimental data from a stereotyping study <span class="citation" data-cites="Sarafoglou2025-fr Holzmeister2025-vf">(<a href="#ref-Holzmeister2025-vf" role="doc-biblioref">Holzmeister et al. 2025</a>; <a href="#ref-Sarafoglou2025-fr" role="doc-biblioref">Sarafoglou and Hoogeveen 2025</a>)</span>.</p>
+<h3 data-number="2.3" id="masking-functions"><span class="header-section-number">2.3</span> Masking functions</h3>
+<p>Masking functions replace categorical values with anonymous labels. This is useful when you want to hide the original information, such as treatment conditions or group assignments, and there are a limited number of unique values. The <code>mask_labels()</code> function takes a character or factor type vector and replaces each unique value with a randomly assigned masked label. The function preserves factor structure when the input is a factor. After masking, each unique value receives a unique masked label, the same original value always maps to the same masked label, and the assignment of masked labels to original values is randomized. Missing values are preserved during masking.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Create a simple treatment vector</span></span>
+<span><span class='va'>treatment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"control"</span>, <span class='st'>"treatment_1"</span>, <span class='st'>"treatment_2"</span>, <span class='st'>"control"</span>, <span class='st'>"treatment_1"</span>, <span class='st'>"treatment_2"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Mask the labels</span></span>
+<span><span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_labels.html'>mask_labels</a></span><span class='op'>(</span><span class='va'>treatment</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;masked_group_01&quot; &quot;masked_group_02&quot; &quot;masked_group_03&quot;
+[4] &quot;masked_group_01&quot; &quot;masked_group_02&quot; &quot;masked_group_03&quot;</code></pre>
+</div>
+<p>It is possible to customize the prefix used for masked labels:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_labels.html'>mask_labels</a></span><span class='op'>(</span><span class='va'>treatment</span>, prefix <span class='op'>=</span> <span class='st'>"group_"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;group_01&quot; &quot;group_02&quot; &quot;group_03&quot; &quot;group_01&quot; &quot;group_02&quot; &quot;group_03&quot;</code></pre>
+</div>
+<p>The <code>mask_variables()</code> function extends the masking functionality to multiple columns in a data frame simultaneously. It is possible to use tidyelect helpers to select columns. for instance, in the MARP dataset, we want to simultaneously mask labels within the columns “country” and “denomination”. To make the example manageable, we first create a smaller example dataset with 10 random rows. Then we demonstrate how to use <code>mask_variables()</code> to mask the selected columns. It is possible to use tidyselect helpers (such as <code>starts_with()</code>, <code>any_of()</code>, etc.) to select columns. In the next example, we apply masking to all character columns in the example dataset.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>marp_example</span> <span class='op'>&lt;-</span></span>
+<span>    <span class='va'>marp</span> <span class='op'>|&gt;</span></span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>subject</span>, <span class='va'>country</span>, <span class='va'>denomination</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_n</a></span><span class='op'>(</span><span class='fl'>6</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>marp_example</span></span></code></pre>
+</div>
+<pre><code>  subject country               denomination
+1    5011   India Christian (Roman Catholic)
+2    4015 Germany Christian (Roman Catholic)
+3    4271 Germany                Evangelical
+4    4591 Germany                       &lt;NA&gt;
+5   10225      US Christian (Roman Catholic)
+6    9060   Spain                       &lt;NA&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>marp_example</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_variables.html'>mask_variables</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"country"</span>, <span class='st'>"denomination"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>  subject          country          denomination
+1    5011 country_group_01 denomination_group_01
+2    4015 country_group_03 denomination_group_01
+3    4271 country_group_03 denomination_group_02
+4    4591 country_group_03                  &lt;NA&gt;
+5   10225 country_group_04 denomination_group_01
+6    9060 country_group_02                  &lt;NA&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>marp_example</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_variables.html'>mask_variables</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/where.html'>where</a></span><span class='op'>(</span><span class='va'>is.character</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>  subject          country          denomination
+1    5011 country_group_04 denomination_group_01
+2    4015 country_group_02 denomination_group_01
+3    4271 country_group_02 denomination_group_02
+4    4591 country_group_02                  &lt;NA&gt;
+5   10225 country_group_03 denomination_group_01
+6    9060 country_group_01                  &lt;NA&gt;</code></pre>
+</div>
+<p>By default, each column gets its own set of masked labels with the column name as prefix. When <code>.across_variables = TRUE</code>, all selected columns share the same mapping. A crucial feature for longitudinal or repeated-measures data in wide format is the <code>.across_variables</code> parameter. When set to <code>TRUE</code>, it ensures that all selected variables are masked using the same transformation or mapping. This preserves the relative differences or associtions between time points while hiding the true values from the analyst. For example, in the dataset below, we have two columns representing pre- and post-treatment conditions. By applying <code>mask_variables()</code> with <code>.across_variables = TRUE</code>, we ensure that the same original condition (e.g., “A”) is masked to the same new label across both columns, preserving the relationship between pre- and post-conditions while concealing their true identities.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>pre_condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span><span class='op'>)</span>,</span>
+<span>                 post_condition <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"B"</span>, <span class='st'>"D"</span>, <span class='st'>"D"</span>, <span class='st'>"C"</span><span class='op'>)</span>,</span>
+<span>                 id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span></span>
+<span>                 <span class='op'>)</span></span>
+<span><span class='va'>df</span></span></code></pre>
+</div>
+<pre><code>  pre_condition post_condition id
+1             A              B  1
+2             B              D  2
+3             C              D  3
+4             D              C  4</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_variables.html'>mask_variables</a></span><span class='op'>(</span><span class='va'>df</span>, </span>
+<span>               <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pre_condition"</span>, <span class='st'>"post_condition"</span><span class='op'>)</span>,</span>
+<span>               .across_variables <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>    pre_condition  post_condition id
+1 masked_group_02 masked_group_01  1
+2 masked_group_01 masked_group_04  2
+3 masked_group_03 masked_group_04  3
+4 masked_group_04 masked_group_03  4</code></pre>
+</div>
+<h4 class="unnumbered" data-number="2.3.1" id="masking-variable-names">Masking variable names</h4>
+<p>The <code>mask_names()</code> function allows users to rename variables in a dataset to anonymous, generic labels. This is especially useful in analyses where variable names carry substantive meaning (e.g., questionnaire items, network nodes, test-items), and one wants to prevent analysts from recognizing which item is which during preprocessing or exploratory phases.</p>
+<p>The <code>mask_names()</code> function takes a data frame and one or more variable sets, which can be specified either with tidyselect expressions (e.g., <code>starts_with("Q")</code>) or as character vectors of column names. The <code>prefix</code> argument sets the base for the masked names. For instance, in the <code>williams</code> data we can blind all variables that are related to the impulsivity scale.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>williams</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code> [1] &quot;subject&quot;             &quot;SexUnres_1&quot;          &quot;SexUnres_2&quot;         
+ [4] &quot;SexUnres_3&quot;          &quot;SexUnres_4_r&quot;        &quot;SexUnres_5_r&quot;       
+ [7] &quot;Impuls_1&quot;            &quot;Impuls_2_r&quot;          &quot;Impul_3_r&quot;          
+[10] &quot;Opport_1&quot;            &quot;Opport_2&quot;            &quot;Opport_3&quot;           
+[13] &quot;Opport_4&quot;            &quot;Opport_5&quot;            &quot;Opport_6_r&quot;         
+[16] &quot;InvEdu_1_r&quot;          &quot;InvEdu_2_r&quot;          &quot;InvChild_1&quot;         
+[19] &quot;InvChild_2_r&quot;        &quot;age&quot;                 &quot;gender&quot;             
+[22] &quot;ecology&quot;             &quot;duration_in_seconds&quot; &quot;attention_1&quot;        
+[25] &quot;attention_2&quot;        </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>williams</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_names.html'>mask_names</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"Impul"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"masked_"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code> [1] &quot;subject&quot;             &quot;SexUnres_1&quot;          &quot;SexUnres_2&quot;         
+ [4] &quot;SexUnres_3&quot;          &quot;SexUnres_4_r&quot;        &quot;SexUnres_5_r&quot;       
+ [7] &quot;masked_02&quot;           &quot;masked_01&quot;           &quot;masked_03&quot;          
+[10] &quot;Opport_1&quot;            &quot;Opport_2&quot;            &quot;Opport_3&quot;           
+[13] &quot;Opport_4&quot;            &quot;Opport_5&quot;            &quot;Opport_6_r&quot;         
+[16] &quot;InvEdu_1_r&quot;          &quot;InvEdu_2_r&quot;          &quot;InvChild_1&quot;         
+[19] &quot;InvChild_2_r&quot;        &quot;age&quot;                 &quot;gender&quot;             
+[22] &quot;ecology&quot;             &quot;duration_in_seconds&quot; &quot;attention_1&quot;        
+[25] &quot;attention_2&quot;        </code></pre>
+</div>
+<p>Use multiple <code>mask_names()</code> calls to blind different sets of variables independently. Assigning distinct prefixes allows variables to be anonymized while preserving information about their original clusters. For example, an analyst can recognize that a set of variables belongs to the same construct—enabling procedures such as factor analysis or reliability estimation—without knowing which specific items are being evaluated. The example below demonstrates this clustered masking approach in a pipe-based workflow.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>masked_williams</span> <span class='op'>&lt;-</span> </span>
+<span>    <span class='va'>williams</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_names.html'>mask_names</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"SexUnres"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"masked_set_A_"</span><span class='op'>)</span> <span class='op'>|&gt;</span>  </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_names.html'>mask_names</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"Impul"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"masked_set_B_"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_names.html'>mask_names</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"Opport"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"masked_set_C_"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_names.html'>mask_names</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"InvEdu"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"masked_set_D_"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://nthun.github.io/vazul/reference/mask_names.html'>mask_names</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"InvChild"</span><span class='op'>)</span>, prefix <span class='op'>=</span> <span class='st'>"masked_set_E_"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>masked_williams</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code> [1] &quot;subject&quot;             &quot;masked_set_A_03&quot;     &quot;masked_set_A_04&quot;    
+ [4] &quot;masked_set_A_01&quot;     &quot;masked_set_A_02&quot;     &quot;masked_set_A_05&quot;    
+ [7] &quot;masked_set_B_01&quot;     &quot;masked_set_B_02&quot;     &quot;masked_set_B_03&quot;    
+[10] &quot;masked_set_C_06&quot;     &quot;masked_set_C_01&quot;     &quot;masked_set_C_05&quot;    
+[13] &quot;masked_set_C_02&quot;     &quot;masked_set_C_04&quot;     &quot;masked_set_C_03&quot;    
+[16] &quot;masked_set_D_01&quot;     &quot;masked_set_D_02&quot;     &quot;masked_set_E_02&quot;    
+[19] &quot;masked_set_E_01&quot;     &quot;age&quot;                 &quot;gender&quot;             
+[22] &quot;ecology&quot;             &quot;duration_in_seconds&quot; &quot;attention_1&quot;        
+[25] &quot;attention_2&quot;        </code></pre>
+</div>
+<p>Once masked, one can proceed with analyses (e.g. factor analysis, network analysis) on the masked variables, without knowing which original items correspond to which columns. For example, we can run a factor analysis on the masked items:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>masked_williams</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"masked_set"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/factanal.html'>factanal</a></span><span class='op'>(</span>factors <span class='op'>=</span> <span class='fl'>3</span>, rotation <span class='op'>=</span> <span class='st'>"varimax"</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/loadings.html'>loadings</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span>cutoff <span class='op'>=</span> <span class='fl'>0.3</span>, sort <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>
+Loadings:
+                Factor1 Factor2 Factor3
+masked_set_A_03  0.648           0.504 
+masked_set_A_04  0.705                 
+masked_set_A_01  0.730           0.340 
+masked_set_B_01  0.751                 
+masked_set_C_06  0.873                 
+masked_set_C_01  0.833                 
+masked_set_C_05  0.866                 
+masked_set_C_02  0.761                 
+masked_set_C_04  0.863                 
+masked_set_E_02  0.770                 
+masked_set_A_02          0.745   0.306 
+masked_set_A_05          0.568         
+masked_set_B_02          0.861         
+masked_set_B_03          0.740         
+masked_set_C_03          0.696         
+masked_set_D_01          0.695         
+masked_set_D_02          0.841         
+masked_set_E_01          0.865         
+
+               Factor1 Factor2 Factor3
+SS loadings      6.314   4.842   0.731
+Proportion Var   0.351   0.269   0.041
+Cumulative Var   0.351   0.620   0.660</code></pre>
+</div>
+<p>Because the column names are anonymized, any decisions about factor inclusion or rotation are made blind to the substantive meaning of items, reducing the risk of interpretive bias.</p>
+<p>In short, <code>mask_names()</code> supports naming-based blinding by decoupling analysis from semantic content, while preserving the full data structure needed for legitimate exploratory workflows.</p>
+<h3 data-number="2.4" id="scrambling-functions"><span class="header-section-number">2.4</span> Scrambling functions</h3>
+<p>Scrambling functions randomize the order of values while preserving all original data content. This approach maintains the data distribution while breaking the connection between observations and their original values. The <code>scramble_values()</code> function randomly reorders the elements of a vector. The vector can contain numeric, character, or factor type data. Scrambling is useful when we want to preserve the original values but eliminate any correspondence between observations and their values.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Numeric data</span></span>
+<span><span class='va'>numbers</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span></span>
+<span><span class='fu'><a href='https://nthun.github.io/vazul/reference/scramble_values.html'>scramble_values</a></span><span class='op'>(</span><span class='va'>numbers</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code> [1]  2  1  5  7  9 10  3  8  6  4</code></pre>
+</div>
+<p>The <code>scramble_variables()</code> function extends the scrambling functionality to data frames. It allows scrambling multiple columns simultaneously, with options for independent scrambling, joint scrambling, and within-group scrambling. Columns can be selected using tidyselect helpers. For instance, in the williams data we could choose to scramble the columns age (a demographic variable) and ecology (the identifier of the experimental condition) as follows:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>williams_example</span> <span class='op'>&lt;-</span></span>
+<span>    <span class='va'>williams</span> <span class='op'>|&gt;</span></span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>subject</span>, <span class='va'>age</span>, <span class='va'>ecology</span><span class='op'>)</span> <span class='op'>|&gt;</span> </span>
+<span>    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>williams_example</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 3
+  subject          age ecology  
+  &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;    
+1 A30MP4LXV4MIFD    34 Hopeful  
+2 A16X5FB3HAFCKN    30 Desperate
+3 A1E9D1OT9VJYDZ    40 Desperate
+4 A16FPOYD7566WI    35 Hopeful  
+5 A11NOTVHWST7Y3    26 Desperate
+6 A3TDR6MXS6UO5Z    33 Desperate</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://nthun.github.io/vazul/reference/scramble_variables.html'>scramble_variables</a></span><span class='op'>(</span><span class='va'>williams_example</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"ecology"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 3
+  subject          age ecology  
+  &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;    
+1 A30MP4LXV4MIFD    30 Desperate
+2 A16X5FB3HAFCKN    40 Desperate
+3 A1E9D1OT9VJYDZ    33 Hopeful  
+4 A16FPOYD7566WI    26 Desperate
+5 A11NOTVHWST7Y3    35 Hopeful  
+6 A3TDR6MXS6UO5Z    34 Desperate</code></pre>
+</div>
+<p>By default, columns are scrambled independently. Setting <code>.together = TRUE</code> causes the selected columns to be scrambled jointly, preserving their row-wise associations. Adding this argument to the previous example therefore maintains the relationship between the two scrambled variables.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://nthun.github.io/vazul/reference/scramble_variables.html'>scramble_variables</a></span><span class='op'>(</span><span class='va'>williams_example</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"ecology"</span><span class='op'>)</span>, .together <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 3
+  subject          age ecology  
+  &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;    
+1 A30MP4LXV4MIFD    34 Hopeful  
+2 A16X5FB3HAFCKN    40 Desperate
+3 A1E9D1OT9VJYDZ    30 Desperate
+4 A16FPOYD7566WI    35 Hopeful  
+5 A11NOTVHWST7Y3    26 Desperate
+6 A3TDR6MXS6UO5Z    33 Desperate</code></pre>
+</div>
+<p>Scrambling can be done in groups using the <code>.groups</code> parameter. This ensures that values are only scrambled within their original groups. In the following example, we scramble the columns x and y within each group defined by the group column:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span>,</span>
+<span>                 y <span class='op'>=</span> <span class='va'>letters</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>]</span>,</span>
+<span>                 group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"A"</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"B"</span>, <span class='st'>"B"</span><span class='op'>)</span></span>
+<span>                 <span class='op'>)</span></span>
+<span><span class='va'>df</span> </span></code></pre>
+</div>
+<pre><code>  x y group
+1 1 a     A
+2 2 b     A
+3 3 c     A
+4 4 d     B
+5 5 e     B
+6 6 f     B</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://nthun.github.io/vazul/reference/scramble_variables.html'>scramble_variables</a></span><span class='op'>(</span><span class='va'>df</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, .groups <span class='op'>=</span> <span class='st'>"group"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 3
+      x y     group
+  &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+1     2 b     A    
+2     3 c     A    
+3     1 a     A    
+4     5 f     B    
+5     6 e     B    
+6     4 d     B    </code></pre>
+</div>
+<p>Unlike masking, row-wise operation is highly relevant for scrambling. Row-wise scrambling is performed using <code>scramble_variables()</code> with the <code>.byrow = TRUE</code> argument. This is useful for scrambling repeated measures or item responses. Within each row, the values are shuffled among the item columns. You can scramble multiple sets of columns independently. The function can use tidyselect helpers. In the next example, we scramble values across three day variables for each participant in a hypothetical dataset:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>df_wide</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
+<span>  day_1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>7</span><span class='op'>)</span>,</span>
+<span>  day_2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>8</span><span class='op'>)</span>,</span>
+<span>  day_3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span><span class='op'>)</span>,</span>
+<span>  score_a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>40</span>, <span class='fl'>70</span><span class='op'>)</span>,</span>
+<span>  score_b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>50</span>, <span class='fl'>80</span><span class='op'>)</span>,</span>
+<span>  id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span></span>
+<span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>df_wide</span></span></code></pre>
+</div>
+<pre><code>  day_1 day_2 day_3 score_a score_b id
+1     1     2     3      10      20  1
+2     4     5     6      40      50  2
+3     7     8     9      70      80  3</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://nthun.github.io/vazul/reference/scramble_variables.html'>scramble_variables</a></span><span class='op'>(</span><span class='va'>df_wide</span>, <span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"day_"</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"score_a"</span>, <span class='st'>"score_b"</span><span class='op'>)</span>, .byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>  day_1 day_2 day_3 score_a score_b id
+1     2    20     3       1      10  1
+2     4    50     6      40       5  2
+3     7     8    80      70       9  3</code></pre>
+</div>
+<h2 data-number="3" id="summary"><span class="header-section-number">3</span> Summary</h2>
+<p>The introduction of <strong>vazul</strong> fills a notable gap in the <strong>R</strong> ecosystem, as no dedicated package currently exists to specifically address the diverse requirements of analysis blinding. While some basic blinding tasks—such as simple vector permutations—can be achieved using base <strong>R</strong> or <strong>tidyverse</strong> functions like sample() or mutate(), these manual approaches quickly become error-prone as study designs grow in complexity. When dealing with multiple independent variables, hierarchical data structures, or the need for consistent masking across several columns, the risk of “breaking” the data structure or accidentally unblinding the analyst increases significantly. By providing a unified and tested framework, <strong>vazul</strong> abstracts these technical intricacies, and allow researchers to focus on the conceptual rigor of their analysis plans rather than the underlying data manipulation logic.</p>
+<p>The functions implemented in <strong>vazul</strong> are applicable to a wide range of paradigms and data structures and simplify the blinding process, which in turn facilitates the assignment of data-blinding roles within research teams. Specifically, since data blinding no longer requires implementing custom code the data-manager role need not be filled by an expert in the analytic method or data domain. Instead, junior lab members or external collaborators can manage data blinding, while domain experts develop the analytic strategy.</p>
+<p>Beyond standalone use in <strong>R</strong> scripts, the package’s modular design makes it an ideal candidate for integration into other statistical software platforms. For instance, the inclusion of <strong>vazul</strong> as a back-end for the <strong>JASP</strong> <span class="citation" data-cites="JASP2025">(<a href="#ref-JASP2025" role="doc-biblioref">JASP Team 2025</a>)</span> graphical interface could provide a point-and-click solution for analysis blinding, further facilitating the adoption of these best practices across the social and behavioral sciences.</p>
+<h2 data-number="4" id="acknowledgements"><span class="header-section-number">4</span> Acknowledgements</h2>
+<p>Tamás Nagy was supported by the University Excellence Fund of Eötvös Loránd University, Budapest, Hungary (ELTE), and the János Bolyai research fellowship of the Hungarian Academy of Sciences. Alexandra Sarafoglou was supported by an 2024 Ammodo Science Award.</p>
+<h2 data-number="5" id="references"><span class="header-section-number">5</span> References</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aczel2020transparency" class="csl-entry" role="listitem">
+B. Aczel, B. Szaszi, A. Sarafoglou, Z. Kekecs, Š. Kucharský, D. Benjamin, C. D. Chambers, A. Fisher, A. Gelman, M. A. Gernsbacher, et al. A consensus-based transparency checklist. <em>Nature Human Behaviour</em>, 4: 4–6, 2020. DOI <a href="https://doi.org/10.1038/s41562-019-0772-6">10.1038/s41562-019-0772-6</a>.
+</div>
+<div id="ref-baker2016scientists" class="csl-entry" role="listitem">
+M. Baker. 1,500 scientists lift the lid on reproducibility. <em>Nature News</em>, 533: 452, 2016. DOI <a href="https://doi.org/10.1038/533452a">10.1038/533452a</a>.
+</div>
+<div id="ref-camerer2016evaluating" class="csl-entry" role="listitem">
+C. F. Camerer, A. Dreber, E. Forsell, T.-H. Ho, J. Huber, M. Johannesson, M. Kirchler, J. Almenberg, A. Altmejd, T. Chan, et al. Evaluating replicability of laboratory experiments in economics. <em>Science</em>, 351(6280): 1433–1436, 2016. DOI <a href="https://doi.org/10.1126/science.aaf0918">10.1126/science.aaf0918</a>.
+</div>
+<div id="ref-cockburn2020threats" class="csl-entry" role="listitem">
+A. Cockburn, P. Dragicevic, L. Besançon and C. Gutwin. Threats of a replication crisis in empirical computer science. <em>Communications of the ACM</em>, 63(8): 70–79, 2020. DOI <a href="https://doi.org/10.1145/3360311">10.1145/3360311</a>.
+</div>
+<div id="ref-dutilh2021blinding" class="csl-entry" role="listitem">
+G. Dutilh, A. Sarafoglou and E.-J. Wagenmakers. Flexible yet fair: <span>B</span>linding analyses in experimental psychology. <em>Synthese</em>, 198: S5745–S5772, 2019. DOI <a href="https://doi.org/10.1007/s11229-019-02456-7">10.1007/s11229-019-02456-7</a>.
+</div>
+<div id="ref-gelman2013garden" class="csl-entry" role="listitem">
+A. Gelman and E. Loken. The garden of forking paths: <span>W</span>hy multiple comparisons can be a problem, even when there is no "fishing expedition" or "p-hacking" and the research hypothesis was posited ahead of time. <em>Department of Statistics, Columbia University</em>, 348: 2013. URL <a href="http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf">http://www.stat.columbia.edu/~gelman/research/unpublished/p_hacking.pdf</a>.
+</div>
+<div id="ref-gelman2016statistical" class="csl-entry" role="listitem">
+A. Gelman and E. Loken. The statistical crisis in science. In <em>The best writing on mathematics</em>, Ed M. Pitici pages. 305–318 2016. Princeton University Press.
+</div>
+<div id="ref-gilbert2016" class="csl-entry" role="listitem">
+D. T. Gilbert, G. King, S. Pettigrew and T. D. Wilson. Comment on <span>“estimating the reproducibility of psychological science.”</span> <em>Science</em>, 351(6277): 1037–1037, 2016. DOI <a href="https://doi.org/10.1126/science.aad7243">10.1126/science.aad7243</a>.
+</div>
+<div id="ref-Hoekstra2025-ub" class="csl-entry" role="listitem">
+R. H. A. Hoekstra, K. Huth, N. Sekulovski, M. Delhalle and A. Sarafoglou. Safeguarding against bias without preregistration: A tutorial on analysis blinding for network analysis. <em>PsyArXiv</em>, 2025. URL <a href="https://osf.io/preprints/psyarxiv/gruw5_v1">https://osf.io/preprints/psyarxiv/gruw5_v1</a>.
+</div>
+<div id="ref-Holzmeister2025-vf" class="csl-entry" role="listitem">
+F. Holzmeister, M. Johannesson, C. F. Camerer, Y. Chen, T.-H. Ho, S. Hoogeveen, J. Huber, N. Imai, T. Imai, L. Jin, et al. Examining the replicability of online experiments selected by a decision market. <em>Nature Human Behaviour</em>, 9(2): 316–330, 2025. URL <a href="http://dx.doi.org/10.1038/s41562-024-02062-9">http://dx.doi.org/10.1038/s41562-024-02062-9</a>.
+</div>
+<div id="ref-MARP2022discussion" class="csl-entry" role="listitem">
+S. Hoogeveen, A. Sarafoglou, M. van Elk and E.-J. Wagenmakers. A many-analysts approach to the relation between religiosity and well-being: <span>Reflection</span> and conclusion. <em>Religion, Brain, &amp; Behaviour</em>, 13(3): 356–363, 2023. DOI <a href="https://doi.org/10.1080/2153599X.2022.2070263">10.1080/2153599X.2022.2070263</a>.
+</div>
+<div id="ref-ioannidis2005contradicted" class="csl-entry" role="listitem">
+J. P. Ioannidis. Contradicted and initially stronger effects in highly cited clinical research. <em>JAMA</em>, 294(2): 218–228, 2005a. DOI <a href="https://doi.org/10.1001/jama.294.2.218">10.1001/jama.294.2.218</a>.
+</div>
+<div id="ref-ioannidis2005most" class="csl-entry" role="listitem">
+J. P. Ioannidis. Why most published research findings are false. <em>PLoS medicine</em>, 2(8): e124, 2005b. DOI <a href="https://doi.org/10.1371/journal.pmed.1004085">10.1371/journal.pmed.1004085</a>.
+</div>
+<div id="ref-JASP2025" class="csl-entry" role="listitem">
+JASP Team. <span class="nocase">JASP (Version 0.95.4)[Computer software]</span>. 2025. URL <a href="https://jasp-stats.org/">https://jasp-stats.org/</a>.
+</div>
+<div id="ref-kerr1998harking" class="csl-entry" role="listitem">
+N. L. Kerr. <span>HARK</span>ing: <span>H</span>ypothesizing after the results are known. <em>Personality and Social Psychology Review</em>, 2: 196–217, 1998. DOI <a href="https://doi.org/10.1207/s15327957pspr0203_4">10.1207/s15327957pspr0203_4</a>.
+</div>
+<div id="ref-Lakens2024-tj" class="csl-entry" role="listitem">
+D. Lakens. When and how to deviate from a preregistration. <em>Collabra. Psychology</em>, 10(1): 117094, 2024. URL <a href="https://online.ucpress.edu/collabra/article-pdf/10/1/117094/839302/collabra_2024_10_1_117094.pdf">https://online.ucpress.edu/collabra/article-pdf/10/1/117094/839302/collabra_2024_10_1_117094.pdf</a>.
+</div>
+<div id="ref-maccoun2021removebiases" class="csl-entry" role="listitem">
+R. MacCoun. Blinding to remove biases in science and society. In <em>Deliberate ignorance: <span>C</span>hoosing not to know</em>, Eds R. Hertwig and C. Engel pages. 51–64 2021. Cambridge: MIT Press.
+</div>
+<div id="ref-maccoun2018psychological" class="csl-entry" role="listitem">
+R. MacCoun and S. Perlmutter. Blind analysis as a correction for confirmatory bias in physics and in psychology. In <em>Psychological science under scrutiny: <span>R</span>ecent challenges and proposed solutions</em>, Eds S. O. Lilienfeld and I. Waldman pages. 297–322 2018. John Wiley; Sons. DOI <a href="https://doi.org/10.1002/9781119095910.ch15">10.1002/9781119095910.ch15</a>.
+</div>
+<div id="ref-maccoun2015hide" class="csl-entry" role="listitem">
+R. MacCoun and S. Perlmutter. Blind analysis: <span>H</span>ide results to seek the truth. <em>Nature</em>, 526: 187–190, 2015. DOI <a href="https://doi.org/10.1038/526187a">10.1038/526187a</a>.
+</div>
+<div id="ref-mcshane2024statistical" class="csl-entry" role="listitem">
+B. B. McShane, E. T. Bradlow, J. G. Lynch Jr and R. J. Meyer. <span>“Statistical significance”</span> and statistical reporting: Moving beyond binary. <em>Journal of Marketing</em>, 00222429231216910, 2024. DOI <a href="https://doi.org/10.1177/00222429231216910">10.1177/00222429231216910</a>.
+</div>
+<div id="ref-muradchanian2021best" class="csl-entry" role="listitem">
+J. Muradchanian, R. Hoekstra, H. Kiers and D. van Ravenzwaaij. How best to quantify replication success? <span>A</span> simulation study on the comparison of replication success metrics. <em>Royal Society Open Science</em>, 8: 201697, 2021. DOI <a href="https://doi.org/10.1098/rsos.201697">10.1098/rsos.201697</a>.
+</div>
+<div id="ref-nagy2025bestiary" class="csl-entry" role="listitem">
+T. Nagy, J. Hergert, M. M. Elsherif, L. Wallrich, K. Schmidt, T. Waltzer, J. W. Payne, B. Gjoneska, Y. Seetahul, Y. A. Wang, et al. Bestiary of <span>Questionable</span> <span>Research</span> <span>Practices</span> in psychology. <em>Advances in Methods and Practices in Psychological Science</em>, 8(3): 25152459251348431, 2025. DOI <a href="https://doi.org/10.1177/25152459251348431">10.1177/25152459251348431</a>.
+</div>
+<div id="ref-Nagy2026-gb" class="csl-entry" role="listitem">
+T. Nagy, M. Kovács and A. Sarafoglou. Vazul: An <span>R</span> package for analysis blinding. 2026. URL <a href="http://dx.doi.org/10.5281/zenodo.18269711">http://dx.doi.org/10.5281/zenodo.18269711</a>.
+</div>
+<div id="ref-nosek2022replicability" class="csl-entry" role="listitem">
+B. A. Nosek, T. E. Hardwicke, H. Moshontz, A. Allard, K. S. Corker, A. Dreber, F. Fidler, J. Hilgard, M. Kline Struhl, M. B. Nuijten, et al. Replicability, robustness, and reproducibility in psychological science. <em>Annual review of psychology</em>, 73: 719–748, 2022. DOI <a href="https://doi.org/10.1146/annurev-psych-020821-114157">10.1146/annurev-psych-020821-114157</a>.
+</div>
+<div id="ref-open2015estimating" class="csl-entry" role="listitem">
+Open Science Collaboration. Estimating the reproducibility of psychological science. <em>Science</em>, 349: aac4716, 2015. DOI <a href="https://doi.org/10.1126/science.aac4716">10.1126/science.aac4716</a>.
+</div>
+<div id="ref-pashler2012editors" class="csl-entry" role="listitem">
+H. Pashler and E.-J. Wagenmakers. Editors’ introduction to the special section on replicability in psychological science: <span>A</span> crisis of confidence? <em>Perspectives on Psychological Science</em>, 7: 528–530, 2012. DOI <a href="https://doi.org/10.1177/1745691612465253">10.1177/1745691612465253</a>.
+</div>
+<div id="ref-peikert2021reproducible" class="csl-entry" role="listitem">
+A. Peikert, C. J. Van Lissa and A. M. Brandmaier. Reproducible research in <span>R</span>: <span>A</span> tutorial on how to do the same thing more than once. <em>Psych</em>, 3(4): 836–867, 2021. DOI <a href="https://doi.org/10.3390/psych3040053">10.3390/psych3040053</a>.
+</div>
+<div id="ref-R2025" class="csl-entry" role="listitem">
+R Core Team. <em>R: A language and environment for statistical computing.</em> Vienna, Austria: R Foundation for Statistical Computing, 2025. URL <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-Sarafoglou2025-fr" class="csl-entry" role="listitem">
+A. Sarafoglou and S. Hoogeveen. Analysis blinding as a potential means to foster a productive collaboration between original authors and replicators. <em>Collabra. Psychology</em>, 11(1): 136869, 2025. URL <a href="https://dx.doi.org/10.1525/collabra.136869">https://dx.doi.org/10.1525/collabra.136869</a>.
+</div>
+<div id="ref-sarafoglou2023comparing" class="csl-entry" role="listitem">
+A. Sarafoglou, S. Hoogeveen and E.-J. Wagenmakers. Comparing analysis blinding with preregistration in the <span>Many-Analysts Religion Project</span>. <em>Advances in Methods and Practices in Psychological Science</em>, 6(1): 25152459221128319, 2023a. DOI <a href="https://doi.org/10.1177/25152459221128319">10.1177/25152459221128319</a>.
+</div>
+<div id="ref-Sarafoglou2023-rf" class="csl-entry" role="listitem">
+A. Sarafoglou, S. Hoogeveen and E.-J. Wagenmakers. Comparing analysis blinding with preregistration in the many-analysts religion project. <em>Advances in Methods and Practices in Psychological Science</em>, 6(1): 25152459221128319, 2023b. URL <a href="https://doi.org/10.1177/25152459221128319">https://doi.org/10.1177/25152459221128319</a>.
+</div>
+<div id="ref-savitz2024responding" class="csl-entry" role="listitem">
+D. A. Savitz, L. A. Wise, J. C. Bond, E. E. Hatch, C. N. Ncube, A. K. Wesselink, M. D. Willis, J. J. Yland and K. J. Rothman. Responding to reviewers and editors about statistical significance testing. <em>Annals of Internal Medicine</em>, 177: 385–386, 2024. DOI <a href="https://doi.org/10.7326/M23-2430">10.7326/M23-2430</a>.
+</div>
+<div id="ref-Schneider2022-oq" class="csl-entry" role="listitem">
+J. Schneider, T. Rosman, A. Kelava and S. Merk. Do open-science badges increase trust in scientists among undergraduates, scientists, and the public? <em>Psychological Science</em>, 33(9): 1588–1604, 2022. URL <a href="http://dx.doi.org/10.1177/09567976221097499">http://dx.doi.org/10.1177/09567976221097499</a>.
+</div>
+<div id="ref-schulz2002blinding" class="csl-entry" role="listitem">
+K. F. Schulz and D. A. Grimes. Blinding in randomised trials: <span>Hiding</span> who got what. <em>The Lancet</em>, 359(9307): 696–700, 2002.
+</div>
+<div id="ref-simmons2011false" class="csl-entry" role="listitem">
+J. P. Simmons, L. N. Nelson and U. Simonsohn. False–positive psychology: <span>U</span>ndisclosed flexibility in data collection and analysis allows presenting anything as significant. <em>Psychological Science</em>, 22: 1359–1366, 2011. DOI <a href="https://doi.org/10.1177/0956797611417632">10.1177/0956797611417632</a>.
+</div>
+<div id="ref-SimonsohnEtAl2020" class="csl-entry" role="listitem">
+U. Simonsohn, L. D. Nelson and J. P. Simmons. Specification curve analysis. <em>Nature Human Behaviour</em>, 4: 1208–1214, 2020. DOI <a href="https://doi.org/10.1038/s41562-020-0912-z">10.1038/s41562-020-0912-z</a>.
+</div>
+<div id="ref-Song2022-em" class="csl-entry" role="listitem">
+H. Song, D. M. Markowitz and S. H. Taylor. Trusting on the shoulders of open giants? Open science increases trust in science for the public and academics. <em>The Journal of Communication</em>, 72(4): 497–510, 2022. URL <a href="https://dx.doi.org/10.1093/joc/jqac017">https://dx.doi.org/10.1093/joc/jqac017</a>.
+</div>
+<div id="ref-steegen2016increasing" class="csl-entry" role="listitem">
+S. Steegen, F. Tuerlinckx, A. Gelman and W. Vanpaemel. Increasing transparency through a multiverse analysis. <em>Perspectives on Psychological Science</em>, 11: 702–712, 2016. DOI <a href="https://doi.org/10.1177/1745691616658637">10.1177/1745691616658637</a>.
+</div>
+<div id="ref-Thibault2023-of" class="csl-entry" role="listitem">
+R. T. Thibault, M. Kovacs, T. E. Hardwicke, A. Sarafoglou, J. P. A. Ioannidis and M. R. Munafò. Reducing bias in secondary data analysis via an explore and confirm analysis workflow (<span>ECAW</span>): A proposal and survey of observational researchers. <em>Royal Society Open Science</em>, 10(10): 230568, 2023. URL <a href="https://dx.doi.org/10.1098/rsos.230568">https://dx.doi.org/10.1098/rsos.230568</a>.
+</div>
+<div id="ref-vandenakker2024potential" class="csl-entry" role="listitem">
+O. R. Van Den Akker, M. Bakker, M. A. L. M. Van Assen, C. R. Pennington, L. Verweij, M. M. Elsherif, A. Claesen, S. D. M. Gaillard, S. K. Yeung, J.-L. Frankenberger, et al. The potential of preregistration in psychology: <span>Assessing</span> preregistration producibility and preregistration-study consistency. <em>Psychological Methods</em>, 2024. DOI <a href="https://doi.org/10.1037/met0000687">10.1037/met0000687</a>.
+</div>
+<div id="ref-vanlissa2021worcs" class="csl-entry" role="listitem">
+C. J. Van Lissa, A. M. Brandmaier, L. Brinkman, A.-L. Lamprecht, A. Peikert, M. E. Struiksma and B. M. Vreede. <span>WORCS</span>: <span>A</span> workflow for open reproducible code in science. <em>Data Science</em>, 4(1): 29–49, 2021. DOI <a href="https://doi.org/10.3233/DS-210031">10.3233/DS-210031</a>.
+</div>
+<div id="ref-Wickham2025-eh" class="csl-entry" role="listitem">
+H. Wickham, R. François, L. Henry, K. Müller and D. Vaughan. Dplyr: A grammar of data manipulation. 2025. URL <a href="https://dplyr.tidyverse.org">https://dplyr.tidyverse.org</a>.
+</div>
+</div>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>But see <span class="citation" data-cites="gilbert2016">Gilbert et al. (<a href="#ref-gilbert2016" role="doc-biblioref">2016</a>)</span>, <span class="citation" data-cites="muradchanian2021best">Muradchanian et al. (<a href="#ref-muradchanian2021best" role="doc-biblioref">2021</a>)</span>, <span class="citation" data-cites="savitz2024responding">Savitz et al. (<a href="#ref-savitz2024responding" role="doc-biblioref">2024</a>)</span>, and <span class="citation" data-cites="mcshane2024statistical">McShane et al. (<a href="#ref-mcshane2024statistical" role="doc-biblioref">2024</a>)</span> for critiques of how replication failure is measured and of the design and validity of some replication attempts.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Vazul was an 11th-century Hungarian prince of the Árpád dynasty, a cousin of King Stephen I (c. 975–1038). Around 1031, Vazul was blinded—according to contemporary chronicles-to make him unfit for succession to the throne. In the same spirit, the <strong>vazul</strong> package helps create blinded data that are unfit for p-hacking.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom">
+<h3 id="references">References</h3>
+<div id="references-listing"></div>
+<h3 id="reuse">Reuse</h3>
+<p>Text and figures are licensed under Creative Commons Attribution <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from ...".</p>
+<h3 id="citation">Citation</h3>
+<p>For attribution, please cite this work as</p>
+<pre class="citation-appendix short">Nagy, et al., "vazul: An R Package for Analysis Blinding", The R Journal, 2026</pre>
+<p>BibTeX citation</p>
+<pre class="citation-appendix long">@article{manuscript,
+  author = {Nagy, Tamás and Kovács, Márton and Sarafoglou, Alexandra},
+  title = {vazul: An R Package for Analysis Blinding},
+  journal = {The R Journal},
+  year = {2026},
+  issn = {2073-4859},
+  pages = {1}
+}</pre>
+</div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

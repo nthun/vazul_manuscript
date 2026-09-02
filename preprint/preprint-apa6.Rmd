@@ -1,36 +1,59 @@
 ---
-title: "vazul: An R Package for Analysis Blinding"
-abstract: >
+title             : "vazul: An R Package for Analysis Blinding"
+shorttitle        : "vazul: R Package for Analysis Blinding"
+
+author: 
+  - name          : "Tamás Nagy"
+    affiliation   : "1"
+    role:
+      - "Conceptualization"
+      - "Software"
+      - "Writing - Original Draft Preparation"
+    address       : "Budapest, Hungary"
+    email         : "nagy.tamas@ppk.elte.hu"
+    orcid         : "0000-0001-5244-0356"
+  - name          : "Márton Kovács"
+    affiliation   : "2"
+    email         : "marton.balazs.kovacs@gmail.com"
+    orcid         : "0000-0002-8142-8492"
+  - name          : "Alexandra Sarafoglou"
+    affiliation   : "3"
+    email         : "a.s.g.sarafoglou@uva.nl"
+    orcid         : "0000-0003-0031-685X"
+
+affiliation:
+  - id            : "1"
+    institution   : "Institute of Psychology, ELTE Eötvös Loránd University"
+  - id            : "2"
+    institution   : "Independent researcher"
+  - id            : "3"
+    institution   : "Department of Psychology, University of Amsterdam"
+
+authornote: |
+  Tamás Nagy was supported by the University Excellence Fund of Eötvös Loránd University and the János Bolyai research fellowship. Alexandra Sarafoglou was supported by a 2024 Ammodo Science Award.
+
+abstract: |
   Analysis blinding is a methodological approach designed to protect the confirmatory status of an analysis by concealing crucial test-relevant aspects of the data from the analysts. This article introduces the vazul package for R, which provides a comprehensive suite of tools for implementing masking and scrambling techniques. We discuss the theoretical foundations of analysis blinding, particularly as a complement or alternative to preregistration. 
   
   The package allows researchers to maintain analytic flexibility while safeguarding against bias. By using vazul, data managers can easily generate blinded datasets that preserve essential distributional properties while obscuring associations or labels that could lead to biased decisions. We provide detailed examples of vector-level, data-frame-level, and row-wise blinding operations, and demonstrate how the package handles complex data structures such as hierarchical or repeated-measures designs.
-author:
-  - name: Tamás Nagy
-    affiliation: ELTE Eötvös Loránd University
-    address:
-      - Institute of Psychology, ELTE Eötvös Loránd University
-      - Budapest, Hungary
-    orcid: 0000-0001-5244-0356
-    email: nagy.tamas@ppk.elte.hu
-  - name: Márton Kovács
-    affiliation: Independent researcher
-    address:
-      - Budapest, Hungary
-    orcid: 0000-0002-8142-8492
-    email: marton.balazs.kovacs@gmail.com
-  - name: Alexandra Sarafoglou
-    affiliation: University of Amsterdam
-    address:
-      - Department of Psychology, University of Amsterdam
-      - Amsterdam, The Netherlands
-    orcid: 0000-0003-0031-685X
-    email: a.s.g.sarafoglou@uva.nl
-bibliography: bibliography.bib
-output: 
-  rjtools::rjournal_article
-editor_options: 
-  chunk_output_type: inline
+  
+keywords          : "analysis blinding, R, open science, reproducible research, masking, scrambling"
+
+bibliography      : ["RJreferences.bib"]
+
+floatsintext      : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man"
+output            : papaja::apa6_pdf
 ---
+
 
 # Introduction
 
